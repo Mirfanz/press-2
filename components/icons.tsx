@@ -357,7 +357,6 @@ export const WalletIconBold: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
-
 export const UserIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
@@ -401,6 +400,56 @@ export const UserIconBold: React.FC<IconSvgProps> = ({
         d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5"
         fill="currentColor"
       />
+    </svg>
+  );
+};
+export const ArrowLeft: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M20 12H4m0 0l6-6m-6 6l6 6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+};
+export const HandMoney: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <g fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M17.414 10.414C18 9.828 18 8.886 18 7s0-2.828-.586-3.414m0 6.828C16.828 11 15.886 11 14 11h-4c-1.886 0-2.828 0-3.414-.586m10.828 0Zm0-6.828C16.828 3 15.886 3 14 3h-4c-1.886 0-2.828 0-3.414.586m10.828 0Zm-10.828 0C6 4.172 6 5.114 6 7s0 2.828.586 3.414m0-6.828Zm0 6.828ZM13 7a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
+        <path
+          d="M18 6a3 3 0 0 1-3-3m3 5a3 3 0 0 0-3 3M6 6a3 3 0 0 0 3-3M6 8a3 3 0 0 1 3 3m-4 9.388h2.26c1.01 0 2.033.106 3.016.308a14.9 14.9 0 0 0 5.33.118c.868-.14 1.72-.355 2.492-.727c.696-.337 1.549-.81 2.122-1.341c.572-.53 1.168-1.397 1.59-2.075c.364-.582.188-1.295-.386-1.728a1.89 1.89 0 0 0-2.22 0l-1.807 1.365c-.7.53-1.465 1.017-2.376 1.162q-.165.026-.345.047m0 0l-.11.012m.11-.012a1 1 0 0 0 .427-.24a1.49 1.49 0 0 0 .126-2.134a1.9 1.9 0 0 0-.45-.367c-2.797-1.669-7.15-.398-9.779 1.467m9.676 1.274a.5.5 0 0 1-.11.012m0 0a9.3 9.3 0 0 1-1.814.004"
+          strokeLinecap="round"
+        />
+        <rect height="8" rx="1.5" width="3" x="2" y="14" />
+      </g>
     </svg>
   );
 };

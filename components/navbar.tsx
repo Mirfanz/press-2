@@ -1,18 +1,44 @@
 "use client";
 import { Button } from "@heroui/button";
-import React from "react";
-import { FaBarsStaggered } from "react-icons/fa6";
-type Props = {};
+import { useRouter } from "next/navigation";
+import React, { ReactNode } from "react";
 
-const Navbar = (props: Props) => {
+import { ArrowLeft } from "./icons";
+
+type Props = {
+  title: string;
+  startContent?: ReactNode;
+  endContent?: ReactNode;
+  hidePrevButton?: boolean;
+};
+
+const Navbar = ({ startContent, title, endContent, hidePrevButton }: Props) => {
+  const router = useRouter();
+
   return (
-    <nav className="bg-foreground-100 py-2">
+    <nav className="bg-primary py-3 sticky top-0 z-50">
       <div className="container">
-        <div className="flex items-center">
-          <h3 className="text-lg font-bold me-auto">PRESS</h3>
-          <Button isIconOnly size="md">
-            <FaBarsStaggered className="text-lg" />
-          </Button>
+        <div className="flex items-center justify-between">
+          <div className="w-full justify-start flex gap-1.5 items-center">
+            {!hidePrevButton && (
+              <Button
+                isIconOnly
+                className="text-primary-foreground"
+                size="sm"
+                variant="light"
+                onPress={router.back}
+              >
+                <ArrowLeft />
+              </Button>
+            )}
+            {startContent}
+          </div>
+          <div>
+            <p className="text-primary-foreground font-semibold">{title}</p>
+          </div>
+          <div className="w-full justify-end flex gap-1.5 items-center">
+            {endContent}
+          </div>
         </div>
       </div>
     </nav>

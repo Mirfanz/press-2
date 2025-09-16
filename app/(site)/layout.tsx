@@ -6,8 +6,7 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col h-dvh overflow-hidden">
-      {/* <Navbar /> */}
+    <div className="relative flex flex-col h-dvh overflow-hidden max-w-sm mx-auto sm:border-x-2 border-primary">
       <div className="grow overflow-y-auto">{children}</div>
       <Footer />
     </div>
