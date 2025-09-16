@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
-@config "../tailwind.config.js"
+@config "../tailwind.config.js";
+
+.container {
+  @apply px-4;
+}
