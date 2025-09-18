@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
 
     const accessToken = await createAccessToken(user);
 
-    (await cookieStore).set("access_token", accessToken);
+    (await cookieStore).set("access_token", accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24,
+    });
 
     return NextResponse.json(
       {
