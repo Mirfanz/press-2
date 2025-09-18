@@ -5,19 +5,31 @@ import { Avatar, Button, Card, Chip, Divider } from "@heroui/react";
 import { FaGear } from "react-icons/fa6";
 import Link from "next/link";
 
+import { useAuth } from "./auth-provider";
+
 type Props = {};
 
 const Home = (props: Props) => {
+  const auth = useAuth();
+
   return (
     <main>
       <div className="flex px-5 py-6 gap-4 items-center">
-        <Avatar isBordered size="md" />
+        <Avatar
+          isBordered
+          imgProps={{
+            src: auth.user?.image_url || undefined,
+            alt: "Avatar " + auth.user?.name,
+          }}
+          size="md"
+        />
         <div className="">
           <h3 className="text-sm font-medium -mb-1 text-foreground-800">
-            Muhammad Irfan
+            {auth.user?.name}
           </h3>
           <small className="text-xs text-foreground-500">
-            FO0306 | Operator
+            <span className="uppercase">{auth.user?.nik}</span> |{" "}
+            {auth.user?.role}
           </small>
         </div>
         <Button isIconOnly className="ml-auto" color="primary" variant="solid">

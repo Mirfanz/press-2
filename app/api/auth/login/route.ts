@@ -12,11 +12,9 @@ export async function POST(req: NextRequest) {
 
     const result = await prisma.user.findUnique({
       where: {
-        nik: nik,
+        nik: nik.toLowerCase(),
       },
     });
-
-    console.log("result", result);
 
     if (!result || result.password !== password)
       return NextResponse.json(
@@ -46,6 +44,8 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
+    console.log("error", error);
+
     return NextResponse.json(
       { success: false, message: "Somethig is wrong." },
       { status: 500 },

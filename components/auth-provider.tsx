@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { addToast } from "@heroui/toast";
+import { useRouter } from "next/navigation";
 
 import { CheckReadIcon, CloseSquareIcon, LogoutIcon } from "./icons";
 
@@ -26,6 +27,7 @@ type AuthProps = {
 const AuthContext = createContext<AuthProps | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const router = useRouter();
   const [user, setUser] = useState<UserT | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -66,7 +68,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       <SwalContent
         cancelButton="Batal"
         confirmButton="Logout"
-        title="Serius Mau Logout?"
+        description={`Apakah anda yakin ingin keluar dari akun ${user?.name}`}
+        icon={<LogoutIcon className="w-14 h-14 text-danger" />}
+        title="Yakin Logout?"
       />,
     );
 
@@ -81,6 +85,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           color: "default",
           icon: <LogoutIcon className="" />,
         });
+        router.refresh();
 
         return true;
       })
