@@ -3,7 +3,7 @@ import { Button } from "@heroui/button";
 import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
 
-import { ArrowLeft } from "./icons";
+import { ArrowLeftIcon } from "./icons";
 
 type Props = {
   title: string;
@@ -28,7 +28,7 @@ const Navbar = ({ startContent, title, endContent, hidePrevButton }: Props) => {
                 variant="light"
                 onPress={router.back}
               >
-                <ArrowLeft />
+                <ArrowLeftIcon />
               </Button>
             )}
             {startContent}

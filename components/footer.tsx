@@ -7,13 +7,13 @@ import Link from "next/link";
 
 import {
   BellIcon,
-  BellIconBold,
+  BellBoldIcon,
   HomeIcon,
-  HomeIconBold,
+  HomeBoldIcon,
   UserIcon,
   UserIconBold,
   WalletIcon,
-  WalletIconBold,
+  WalletBoldIcon,
 } from "./icons";
 
 type Props = {};
@@ -22,7 +22,7 @@ const navItems = [
     label: "Home",
     icon: {
       default: HomeIcon,
-      active: HomeIconBold,
+      active: HomeBoldIcon,
     },
     path: "/",
     patern: /^\/$/,
@@ -31,7 +31,7 @@ const navItems = [
     label: "Inform",
     icon: {
       default: BellIcon,
-      active: BellIconBold,
+      active: BellBoldIcon,
     },
     path: "/information",
     patern: /^\/information.*$/,
@@ -40,7 +40,7 @@ const navItems = [
     label: "Cash",
     icon: {
       default: WalletIcon,
-      active: WalletIconBold,
+      active: WalletBoldIcon,
     },
     path: "/cash",
     patern: /^\/cash.*$/,

@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@heroui/button";
 
 import Navbar from "../navbar";
-import { HandMoney } from "../icons";
+import { HandMoneyIcon } from "../icons";
 
 type Props = {};
 
@@ -15,7 +15,7 @@ const Cash = (props: Props) => {
         <Navbar
           endContent={
             <Button isIconOnly className="" size="sm">
-              <HandMoney />
+              <HandMoneyIcon />
             </Button>
           }
           title="KEUANGAN"

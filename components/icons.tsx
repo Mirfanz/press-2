@@ -210,7 +210,7 @@ export const HomeIcon: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
-export const HomeIconBold: React.FC<IconSvgProps> = ({
+export const HomeBoldIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
   height,
@@ -258,7 +258,7 @@ export const BellIcon: React.FC<IconSvgProps> = ({
   );
 };
 
-export const BellIconBold: React.FC<IconSvgProps> = ({
+export const BellBoldIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
   height,
@@ -324,7 +324,7 @@ export const WalletIcon: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
-export const WalletIconBold: React.FC<IconSvgProps> = ({
+export const WalletBoldIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
   height,
@@ -403,7 +403,7 @@ export const UserIconBold: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
-export const ArrowLeft: React.FC<IconSvgProps> = ({
+export const ArrowLeftIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
   height,
@@ -428,7 +428,7 @@ export const ArrowLeft: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
-export const HandMoney: React.FC<IconSvgProps> = ({
+export const HandMoneyIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
   height,
@@ -450,6 +450,136 @@ export const HandMoney: React.FC<IconSvgProps> = ({
         />
         <rect height="8" rx="1.5" width="3" x="2" y="14" />
       </g>
+    </svg>
+  );
+};
+export const CloseSquareIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="m14.5 9.5l-5 5m0-5l5 5M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464c.974.974 1.3 2.343 1.41 4.536"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+};
+export const CloseSquareBoldIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <path
+        clipRule="evenodd"
+        d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+    </svg>
+  );
+};
+export const CheckReadIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <g fill="none">
+        <path
+          d="M4.565 12.407a.75.75 0 1 0-1.13.986zM7.143 16.5l-.565.493a.75.75 0 0 0 1.13 0zm8.422-8.507a.75.75 0 1 0-1.13-.986zm-5.059 3.514a.75.75 0 0 0 1.13.986zm-.834 3.236a.75.75 0 1 0-1.13-.986zm-6.237-1.35l3.143 3.6l1.13-.986l-3.143-3.6zm4.273 3.6l1.964-2.25l-1.13-.986l-1.964 2.25zm3.928-4.5l1.965-2.25l-1.13-.986l-1.965 2.25zm1.965-2.25l1.964-2.25l-1.13-.986l-1.964 2.25z"
+          fill="currentColor"
+        />
+        <path
+          d="m20 7.563l-4.286 4.5M11 16l.429.563l2.143-2.25"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        />
+      </g>
+    </svg>
+  );
+};
+export const LogoutIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      >
+        <path d="M15 12H2m0 0l3.5-3M2 12l3.5 3" strokeLinejoin="round" />
+        <path d="M9.002 7c.012-2.175.109-3.353.877-4.121C10.758 2 12.172 2 15 2h1c2.829 0 4.243 0 5.122.879C22 3.757 22 5.172 22 8v8c0 2.828 0 4.243-.878 5.121c-.769.769-1.947.865-4.122.877M9.002 17c.012 2.175.109 3.353.877 4.121c.641.642 1.568.815 3.121.862" />
+      </g>
+    </svg>
+  );
+};
+export const LogoutBoldIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <svg
+      height={size || height}
+      width={size || width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+      viewBox="0 0 24 24"
+    >
+      <path
+        clipRule="evenodd"
+        d="M16.125 12a.75.75 0 0 0-.75-.75H4.402l1.961-1.68a.75.75 0 1 0-.976-1.14l-3.5 3a.75.75 0 0 0 0 1.14l3.5 3a.75.75 0 1 0 .976-1.14l-1.96-1.68h10.972a.75.75 0 0 0 .75-.75"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+      <path
+        d="M9.375 8c0 .702 0 1.053.169 1.306a1 1 0 0 0 .275.275c.253.169.604.169 1.306.169h4.25a2.25 2.25 0 0 1 0 4.5h-4.25c-.702 0-1.053 0-1.306.168a1 1 0 0 0-.275.276c-.169.253-.169.604-.169 1.306c0 2.828 0 4.243.879 5.121c.878.879 2.292.879 5.12.879h1c2.83 0 4.243 0 5.122-.879c.879-.878.879-2.293.879-5.121V8c0-2.828 0-4.243-.879-5.121S19.203 2 16.375 2h-1c-2.829 0-4.243 0-5.121.879c-.879.878-.879 2.293-.879 5.121"
+        fill="currentColor"
+      />
     </svg>
   );
 };
