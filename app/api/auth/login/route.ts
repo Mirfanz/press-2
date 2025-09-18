@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { compareSync } from "bcrypt";
 
 import { createAccessToken } from "@/lib/utils/auth";
 import prisma from "@/lib/utils/prisma";
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!result || result.password !== password)
+    if (!result || !compareSync(password, result.password))
       return NextResponse.json(
         { success: false, message: "Authentication Failed" },
         { status: 400 },
@@ -44,8 +45,6 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.log("error", error);
-
     return NextResponse.json(
       { success: false, message: "Somethig is wrong." },
       { status: 500 },
