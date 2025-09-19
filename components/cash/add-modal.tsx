@@ -12,9 +12,11 @@ import {
 import { addToast, Divider, Form, NumberInput } from "@heroui/react";
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
-import { FaVirus } from "react-icons/fa6";
+import { FaBug, FaCircleQuestion } from "react-icons/fa6";
 
-import SwalContent, { mySwal } from "@/lib/utils/my-swal";
+import { usePopup } from "../popup-provider";
+
+import queryClient from "@/lib/utils/query-client";
 
 type Props = {
   isOpen: boolean;
@@ -24,6 +26,7 @@ type Props = {
 };
 
 const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
+  const popup = usePopup();
   const [isIncome, setIsIncome] = useState(true);
   const [loading, setLoading] = useState(false);
   const [field, setFields] = useState({
@@ -40,16 +43,16 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (loading) return;
-    // const { isConfirmed } = await mySwal.fire(
-    //   <SwalContent
-    //     title={"Simpan " + (isIncome ? "Pendapatan" : "Pengeluaran")}
-    //     description="Anda dapat menghapusnya lagi nanti"
-    //     icon={<FaQuestion className="w-14 h-14 text-warning" />}
-    //     confirmButton="Ya, Simpan"
-    //     cancelButton="Batal"
-    //   />
-    // );
-    // if (!isConfirmed) return;
+    const ok = await popup.show({
+      title: "Simpan " + (isIncome ? "Pendapatan" : "Pengeluaran"),
+      description: "Anda dapat menghapusnya lagi nanti",
+      icon: <FaCircleQuestion className="w-20 h-20 text-primary" />,
+      confirmButton: "Simpan",
+      cancelButton: "Batal",
+      confirmColor: "primary",
+    });
+
+    if (!ok) return;
     setLoading(true);
     axios
       .post("/api/finance/transaction", {
@@ -67,18 +70,19 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
           description: res.data.data.title,
         });
         setFields({ title: "", amount: 0, note: "" });
+        queryClient.invalidateQueries({ queryKey: ["transactions"] });
+        queryClient.invalidateQueries({ queryKey: ["balance"] });
+
         onClose();
         onSuccess?.();
       })
       .catch((error) => {
-        mySwal.fire(
-          <SwalContent
-            confirmButton="Oke"
-            description={error.message}
-            icon={<FaVirus />}
-            title="Terjadi Kesalahan"
-          />,
-        );
+        popup.show({
+          title: "Terjadi Kesalahan",
+          description: error.message,
+          icon: <FaBug className="w-20 h-20 text-danger" />,
+          cancelButton: "Oke",
+        });
       })
       .finally(() => setLoading(false));
   };

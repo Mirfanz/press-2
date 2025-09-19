@@ -4,10 +4,12 @@ import React from "react";
 import { Button } from "@heroui/button";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaTrash } from "react-icons/fa6";
+import { addToast } from "@heroui/toast";
 
 import Navbar from "../navbar";
 import { HandMoneyIcon } from "../icons";
+import { usePopup } from "../popup-provider";
 
 import Transaction from "./transaction";
 import AddModal from "./add-modal";
@@ -22,6 +24,7 @@ type Props = {};
 let lastdate = dayjs();
 
 const Cash = (props: Props) => {
+  const popup = usePopup();
   const { data: balance } = useQuery(
     {
       queryKey: ["balance"],
@@ -65,22 +68,36 @@ const Cash = (props: Props) => {
     );
 
   const deleteTransaction = async (id: string) => {
-    try {
-      await axios.delete(`/api/finance/transaction`, {
+    if (
+      !(await popup.show({
+        title: "Hapus Transaksi",
+        description: "Data yang sudah dihapus tidak dapat dikembalikan",
+        icon: <FaTrash className="w-20 h-20 text-danger" />,
+        confirmButton: "Hapus",
+        cancelButton: "Batal",
+        confirmColor: "danger",
+      }))
+    )
+      return;
+    axios
+      .delete(`/api/finance/transaction`, {
         data: { id },
+      })
+      .then((resp) => {
+        setShownDetail(null);
+        addToast({ title: "Transaksi Dihapus" });
+        queryClient.invalidateQueries({ queryKey: ["transactions"] });
+        queryClient.invalidateQueries({ queryKey: ["balance"] });
+      })
+      .catch((error) => {
+        addToast({ title: "Gagal Menghapus Transaksi", color: "danger" });
+        console.error("Failed to delete transaction:", error);
       });
-      setShownDetail(null);
-      alert("Transaksi dihapus");
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
-    } catch (error) {
-      alert("Gagal menghapus transaksi");
-      console.error("Failed to delete transaction:", error);
-    }
   };
 
   return (
     <div>
-      <div className="sticky top-0">
+      <div className="sticky top-0 z-50">
         <Navbar
           endContent={
             <>
@@ -124,11 +141,15 @@ const Cash = (props: Props) => {
                 return (
                   <>
                     {changeDate && (
-                      <p className="text-center text-sm font-medium mt-2">
+                      <p
+                        key={"date-" + item.id}
+                        className="text-center text-sm font-medium mt-2"
+                      >
                         {itemDate.format("DD MMMM YYYY")}
                       </p>
                     )}
                     <Transaction
+                      key={"transaction-" + item.id}
                       data={item}
                       showDetail={(transaction) => setShownDetail(transaction)}
                     />
@@ -157,9 +178,6 @@ const Cash = (props: Props) => {
       <AddModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onSuccess={() => {
-          refetch();
-        }}
       />
     </div>
   );

@@ -12,9 +12,9 @@ import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 
 import { CheckReadIcon, CloseSquareIcon, LogoutIcon } from "./icons";
+import { usePopup } from "./popup-provider";
 
 import { UserT } from "@/types";
-import SwalContent, { mySwal } from "@/lib/utils/my-swal";
 
 type AuthProps = {
   user: UserT | null;
@@ -28,6 +28,7 @@ const AuthContext = createContext<AuthProps | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
+  const popup = usePopup();
   const [user, setUser] = useState<UserT | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,40 +47,50 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       })
       .then((resp) => {
         setUser(resp.data.data.user);
-        mySwal.fire(
-          <SwalContent
-            description={`Halo ${resp.data.data.user.name}`}
-            icon={<CheckReadIcon className="w-16 h-16 text-success" />}
-            title="Selamat Datang"
-          />,
-        );
+
+        popup.show({
+          title: "Selamat Datang",
+          description: `Halo ${resp.data.data.user.name}`,
+          icon: <CheckReadIcon className="w-16 h-16 text-success" />,
+          cancelButton: "Oke",
+        });
 
         return true;
       })
       .catch((err) => {
-        mySwal.fire(
-          <SwalContent
-            description="Pastikan nik dan password yang anda masukan benar"
-            icon={<CloseSquareIcon className="w-16 h-16 text-danger" />}
-            title="Login Gagal"
-          />,
+        // mySwal.fire(
+        //   <SwalContent
+        //     description="Pastikan nik dan password yang anda masukan benar"
+        //     icon={<CloseSquareIcon className="w-16 h-16 text-danger" />}
+        //     title="Login Gagal"
+        //   />
+        // );
+        popup.show({
+          title: "Login Gagal",
+          description: "Pastikan nik dan password yang anda masukan benar",
+          icon: <CloseSquareIcon className="w-16 h-16 text-danger" />,
+          cancelButton: "Oke",
+        });
+        setError(
+          err.response?.data?.message ||
+            err.message ||
+            "Terjadi kesalahan saat login",
         );
 
         return false;
       });
 
   const logout = async () => {
-    const { isConfirmed } = await mySwal.fire(
-      <SwalContent
-        cancelButton="Batal"
-        confirmButton="Logout"
-        description={`Apakah anda yakin ingin keluar dari akun ${user?.name}`}
-        icon={<LogoutIcon className="w-14 h-14 text-danger" />}
-        title="Yakin Logout?"
-      />,
-    );
+    const ok = await popup.show({
+      title: "Yakin Logout?",
+      description: `Apakah anda yakin ingin keluar dari akun ${user?.name}`,
+      icon: <LogoutIcon className="w-16 h-16 text-danger" />,
+      confirmButton: "Logout",
+      cancelButton: "Batal",
+      confirmColor: "danger",
+    });
 
-    if (!isConfirmed) return false;
+    if (!ok) return false;
 
     return axios
       .post("/api/auth/logout")

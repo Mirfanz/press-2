@@ -20,8 +20,6 @@ type Props = {
 const DetailModal = ({ data, onClose, deleteTransaction }: Props) => {
   const auth = useAuth();
 
-  if (data === null) return null;
-
   return (
     <Modal hideCloseButton isDismissable isOpen={!!data} onClose={onClose}>
       <ModalContent>
@@ -58,7 +56,9 @@ const DetailModal = ({ data, onClose, deleteTransaction }: Props) => {
               isIconOnly
               color="danger"
               variant="flat"
-              onPress={() => deleteTransaction(data.id)}
+              onPress={() => {
+                if (data) deleteTransaction(data.id);
+              }}
             >
               <FaTrash className="text-base" />
             </Button>
