@@ -20,18 +20,23 @@ type AuthProps = {
   user: UserT | null;
   login: (nik: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
-  isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  hasRole: (...role: string[]) => boolean;
 };
 const AuthContext = createContext<AuthProps | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const [user, setUser] = useState<UserT | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const hasRole = (...roles: string[]) => {
+    if (!user) return false;
+
+    return roles.includes(user.role);
+  };
 
   const login = (nik: string, password: string) =>
     axios
@@ -108,12 +113,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   return (
     <AuthContext.Provider
       value={{
-        user: user,
-        login: login,
-        logout: logout,
-        isAuthenticated: isAuthenticated,
-        isLoading: isLoading,
-        error: error,
+        user,
+        login,
+        logout,
+        isLoading,
+        error,
+        hasRole,
       }}
     >
       {children}

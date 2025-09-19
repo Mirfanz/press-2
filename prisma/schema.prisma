@@ -35,3 +35,24 @@ model User {
 
   @@map("users")
 }
+
+model Finance {
+  id                Int      @id @default(1)
+  balance           Int      @default(0)
+  total_transaction Int      @default(0)
+  updatedAt         DateTime @updatedAt
+
+  @@map("balance_summary")
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  income     Boolean
+  title      String
+  note       String?
+  amount     Int
+  images     String[]
+  created_at DateTime @default(now())
+
+  @@map("transactions")
+}

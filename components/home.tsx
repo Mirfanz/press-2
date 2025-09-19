@@ -4,13 +4,29 @@ import React from "react";
 import { Avatar, Button, Card, Chip, Divider } from "@heroui/react";
 import { FaGear } from "react-icons/fa6";
 import Link from "next/link";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "./auth-provider";
+
+import queryClient from "@/lib/utils/query-client";
 
 type Props = {};
 
 const Home = (props: Props) => {
   const auth = useAuth();
+  const { data: balance } = useQuery(
+    {
+      queryKey: ["balance"],
+      queryFn: async () => {
+        const res = await axios.get("/api/finance");
+
+        return res.data.data.balance;
+      },
+      initialData: 0,
+    },
+    queryClient,
+  );
 
   return (
     <main>
@@ -37,14 +53,16 @@ const Home = (props: Props) => {
         </Button>
       </div>
       <div className="container">
-        <div className="p-6 rounded-2xl flex bg-primary text-primary-foreground shadow-primary-500 shadow-lg flex-row gap-5">
+        <div className="p-6 rounded-2xl flex bg-primary text-primary-foreground shadow-primary-500 shadow-2xl flex-row gap-5">
           <div className="flex items-center flex-col gap-1">
             <p className="text-sm text-foreground-300">Member</p>
             <p className="text-2xl font-medium">42</p>
           </div>
           <div className="flex flex-col gap-1 border-l ps-5 border-foreground-400">
             <p className="text-sm text-foreground-300">Saldo Kas :</p>
-            <p className="text-2xl font-medium">Rp 570.000</p>
+            <p className="text-2xl font-medium">
+              Rp {balance.toLocaleString()}
+            </p>
           </div>
         </div>
       </div>

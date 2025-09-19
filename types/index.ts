@@ -13,3 +13,13 @@ export type UserT = {
   active: boolean;
   created_at: Date;
 };
+
+export type TransactionT = {
+  id: string;
+  income: boolean;
+  title: string;
+  note: string | null;
+  amount: number;
+  images: string[];
+  created_at: Date;
+};
