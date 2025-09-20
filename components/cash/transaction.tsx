@@ -14,6 +14,7 @@ type Props = {
 const Transaction = ({ data, showDetail }: Props) => {
   return (
     <Card
+      fullWidth
       isPressable
       className="flex-row justify-between items-center px-4 py-3"
       radius="sm"

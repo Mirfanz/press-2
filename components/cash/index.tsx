@@ -6,6 +6,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { addToast } from "@heroui/toast";
+import Link from "next/link";
 
 import Navbar from "../navbar";
 import { HandMoneyIcon } from "../icons";
@@ -22,7 +23,7 @@ import dayjs from "@/lib/utils/dayjs";
 
 type Props = {};
 
-let lastdate = dayjs();
+let lastdate = dayjs("2000-01-01");
 
 const Cash = (props: Props) => {
   const popup = usePopup();
@@ -114,7 +115,13 @@ const Cash = (props: Props) => {
                   <FaPlus size={18} />
                 </Button>
               )}
-              <Button isIconOnly className="" size="sm">
+              <Button
+                isIconOnly
+                as={Link}
+                className=""
+                href="/cash/tax"
+                size="sm"
+              >
                 <HandMoneyIcon />
               </Button>
             </>
@@ -136,28 +143,24 @@ const Cash = (props: Props) => {
           <div className="flex flex-col gap-3">
             {data?.pages
               .flatMap((page) => page.data)
-              .map((item: TransactionT) => {
+              .map((item: TransactionT, id) => {
                 const itemDate = dayjs(item.created_at);
-                const changeDate = !itemDate.isSame(lastdate, "date");
+                const changeDate = !id || !itemDate.isSame(lastdate, "date");
 
                 if (changeDate) lastdate = itemDate;
 
                 return (
-                  <>
+                  <div key={item.id} className="w-full">
                     {changeDate && (
-                      <p
-                        key={"date-" + item.id}
-                        className="text-center text-sm font-medium mt-2"
-                      >
+                      <p className="text-center mt-2 mb-3 text-sm font-medium">
                         {itemDate.format("DD MMMM YYYY")}
                       </p>
                     )}
                     <Transaction
-                      key={"transaction-" + item.id}
                       data={item}
                       showDetail={(transaction) => setShownDetail(transaction)}
                     />
-                  </>
+                  </div>
                 );
               })}
 

@@ -23,3 +23,18 @@ export type TransactionT = {
   images: string[];
   created_at: Date;
 };
+
+export type TaxT<User extends boolean = false> = {
+  id: string;
+  month: number;
+  year: number;
+  amount: number;
+  unpaid_count: number;
+  paid_count: number;
+  created_at: Date;
+} & (User extends true
+  ? {
+      unpaid_users: UserT[];
+      paid_users: UserT[];
+    }
+  : {});

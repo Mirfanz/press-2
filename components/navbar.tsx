@@ -34,7 +34,9 @@ const Navbar = ({ startContent, title, endContent, hidePrevButton }: Props) => {
             {startContent}
           </div>
           <div>
-            <p className="text-primary-foreground font-semibold">{title}</p>
+            <p className="text-primary-foreground font-semibold w-max">
+              {title}
+            </p>
           </div>
           <div className="w-full justify-end flex gap-1.5 items-center">
             {endContent}

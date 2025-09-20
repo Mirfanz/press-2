@@ -23,15 +23,17 @@ enum Role {
 }
 
 model User {
-  nik       String  @id
-  password  String
-  name      String
-  image_url String
-  role      Role    @default(Operator)
-  active    Boolean @default(true)
-
+  nik        String   @id
+  password   String
+  name       String
+  image_url  String
+  role       Role     @default(Operator)
+  active     Boolean  @default(true)
   created_at DateTime
   updated_at DateTime
+
+  unpaid_taxes Tax[] @relation("Unpaid User")
+  paid_taxes   Tax[] @relation("Paid User")
 
   @@map("users")
 }
@@ -55,4 +57,17 @@ model Transaction {
   created_at DateTime @default(now())
 
   @@map("transactions")
+}
+
+model Tax {
+  id         String   @id @default(cuid())
+  month      Int
+  year       Int
+  amount     Int
+  created_at DateTime @default(now())
+
+  unpaid_users User[] @relation("Unpaid User")
+  paid_users   User[] @relation("Paid User")
+
+  @@map("taxes")
 }
