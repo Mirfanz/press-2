@@ -79,7 +79,7 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
       .catch((error) => {
         popup.show({
           title: "Terjadi Kesalahan",
-          description: error.message,
+          description: error.response?.data?.message,
           icon: <FaBug className="w-20 h-20 text-danger" />,
           cancelButton: "Oke",
         });

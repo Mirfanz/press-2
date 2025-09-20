@@ -10,6 +10,7 @@ import { addToast } from "@heroui/toast";
 import Navbar from "../navbar";
 import { HandMoneyIcon } from "../icons";
 import { usePopup } from "../popup-provider";
+import { useAuth } from "../auth-provider";
 
 import Transaction from "./transaction";
 import AddModal from "./add-modal";
@@ -25,6 +26,7 @@ let lastdate = dayjs();
 
 const Cash = (props: Props) => {
   const popup = usePopup();
+  const auth = useAuth();
   const { data: balance } = useQuery(
     {
       queryKey: ["balance"],
@@ -101,15 +103,17 @@ const Cash = (props: Props) => {
         <Navbar
           endContent={
             <>
-              <Button
-                isIconOnly
-                className="text-foreground-100"
-                size="sm"
-                variant="light"
-                onPress={() => setIsAddModalOpen(true)}
-              >
-                <FaPlus size={18} />
-              </Button>
+              {auth.hasRole("Admin", "Bendahara") && (
+                <Button
+                  isIconOnly
+                  className="text-foreground-100"
+                  size="sm"
+                  variant="light"
+                  onPress={() => setIsAddModalOpen(true)}
+                >
+                  <FaPlus size={18} />
+                </Button>
+              )}
               <Button isIconOnly className="" size="sm">
                 <HandMoneyIcon />
               </Button>

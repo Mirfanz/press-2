@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 import prisma from "@/lib/utils/prisma";
+import { decodeAccessToken } from "@/lib/utils/auth";
 
 export async function GET(req: NextRequest) {
   try {
+    const accessToken = (await cookies()).get("access_token")?.value;
+
+    if (!accessToken)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    if (!(await decodeAccessToken(accessToken)))
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+
     const finance = await prisma.finance.findUnique({ where: { id: 1 } });
 
     if (!finance) {

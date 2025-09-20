@@ -1,4 +1,5 @@
 import * as jose from "jose";
+import { Role } from "@prisma/client";
 
 import { UserT } from "@/types";
 
@@ -23,4 +24,8 @@ export const decodeAccessToken = async (token: string) => {
   if (!payload.user) return null;
 
   return payload.user as UserT;
+};
+
+export const hasRole = (user: UserT, roles: Role[]) => {
+  return roles.includes(user.role);
 };

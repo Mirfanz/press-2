@@ -1,10 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { Role } from "@prisma/client";
 
 import prisma from "@/lib/utils/prisma";
 import { TransactionT } from "@/types";
+import { decodeAccessToken, hasRole } from "@/lib/utils/auth";
 
 export async function GET(req: NextRequest) {
   try {
+    const accessToken = (await cookies()).get("access_token")?.value;
+
+    if (!accessToken)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    if (!(await decodeAccessToken(accessToken)))
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+
     const params = req.nextUrl.searchParams;
     const page: number = parseInt(params.get("page") || "1") || 1;
     const limit = 20;
@@ -53,6 +69,24 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const accessToken = (await cookies()).get("access_token")?.value;
+
+    const user = await decodeAccessToken(accessToken || "");
+
+    if (!user)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    else if (!hasRole(user, [Role.Admin, Role.Bendahara]))
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Anda tidak memiliki izin menambahkan transaksi",
+        },
+        { status: 403 },
+      );
+
     const body = await req.json();
     const { income, title, note, amount, images } = body;
 
@@ -119,6 +153,24 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const accessToken = (await cookies()).get("access_token")?.value;
+
+    const user = await decodeAccessToken(accessToken || "");
+
+    if (!user)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
+    else if (!hasRole(user, [Role.Admin, Role.Bendahara]))
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Anda tidak memiliki izin menghapus transaksi",
+        },
+        { status: 403 },
+      );
+
     const body = await req.json();
     const { id } = body;
 
