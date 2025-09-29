@@ -38,3 +38,12 @@ export type TaxT<User extends boolean = false> = {
       paid_users: UserT[];
     }
   : {});
+
+export type InformationT = {
+  id: string;
+  title: string;
+  note: string | null;
+  images: string[];
+  created_at: Date;
+  author: UserT;
+};

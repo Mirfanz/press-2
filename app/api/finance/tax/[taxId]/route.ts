@@ -6,15 +6,26 @@ import { decodeAccessToken, hasRole } from "@/lib/utils/auth";
 import prisma from "@/lib/utils/prisma";
 import { TaxT } from "@/types";
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ taxId: string }> }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ taxId: string }> },
+) {
   try {
     const accessToken = (await cookies()).get("access_token")?.value;
 
-    if (!accessToken) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    if (!accessToken)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
 
     const user = await decodeAccessToken(accessToken);
 
-    if (!user) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    if (!user)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
 
     const { taxId } = await params;
 
@@ -28,7 +39,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ taxI
       },
     });
 
-    if (!result) return NextResponse.json({ success: false, message: "Data tidak ditemukan" }, { status: 404 });
+    if (!result)
+      return NextResponse.json(
+        { success: false, message: "Data tidak ditemukan" },
+        { status: 404 },
+      );
 
     const data: TaxT<true> = {
       id: result.id,
@@ -61,32 +76,52 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ taxI
     return NextResponse.json(
       {
         success: false,
-        message: process.env.NODE_ENV === "development" ? error.message : "Terjadi Kesalahan",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Terjadi Kesalahan",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ taxId: string }> }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ taxId: string }> },
+) {
   try {
     const accessToken = (await cookies()).get("access_token")?.value;
 
-    if (!accessToken) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    if (!accessToken)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
 
     const user = await decodeAccessToken(accessToken);
 
-    if (!user) return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    if (!user)
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 },
+      );
 
     if (!hasRole(user, [Role.Admin, Role.Bendahara]))
-      return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: "Forbidden" },
+        { status: 403 },
+      );
 
     const { taxId } = await params;
     const body = await req.json();
     const { nik } = body;
 
     if (!nik || typeof nik !== "string") {
-      return NextResponse.json({ success: false, message: "Invalid user nik" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Invalid user nik" },
+        { status: 400 },
+      );
     }
 
     const tax = await prisma.tax.findUnique({
@@ -94,11 +129,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tax
       include: { unpaid_users: true },
     });
 
-    if (!tax) return NextResponse.json({ success: false, message: "Tax not found" }, { status: 404 });
+    if (!tax)
+      return NextResponse.json(
+        { success: false, message: "Tax not found" },
+        { status: 404 },
+      );
 
     const userUnpaid = tax.unpaid_users.find((u) => u.nik === nik);
 
-    if (!userUnpaid) return NextResponse.json({ success: false, message: "User not in unpaid list" }, { status: 404 });
+    if (!userUnpaid)
+      return NextResponse.json(
+        { success: false, message: "User not in unpaid list" },
+        { status: 404 },
+      );
 
     await prisma.tax.update({
       where: { id: taxId },
@@ -117,9 +160,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tax
     return NextResponse.json(
       {
         success: false,
-        message: process.env.NODE_ENV === "development" ? error.message : "Terjadi Kesalahan",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Terjadi Kesalahan",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

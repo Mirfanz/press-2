@@ -32,8 +32,9 @@ model User {
   created_at DateTime
   updated_at DateTime
 
-  unpaid_taxes Tax[] @relation("Unpaid User")
-  paid_taxes   Tax[] @relation("Paid User")
+  unpaid_taxes Tax[]         @relation("Unpaid User")
+  paid_taxes   Tax[]         @relation("Paid User")
+  informations Information[] @relation("Information Author")
 
   @@map("users")
 }
@@ -70,4 +71,17 @@ model Tax {
   paid_users   User[] @relation("Paid User")
 
   @@map("taxes")
+}
+
+model Information {
+  id         String   @id @default(cuid())
+  title      String
+  note       String?
+  images     String[]
+  created_at DateTime @default(now())
+  author_nik String
+
+  author User @relation("Information Author", fields: [author_nik], references: [nik])
+
+  @@map("informations")
 }

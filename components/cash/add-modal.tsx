@@ -88,7 +88,7 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
   };
 
   return (
-    <Modal hideCloseButton isDismissable isOpen={isOpen} onClose={() => {}}>
+    <Modal hideCloseButton isDismissable={false} isOpen={isOpen}>
       <Form
         className="space-y-4"
         validationBehavior="native"

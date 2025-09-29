@@ -62,73 +62,75 @@ const TaxDetail = (props: Props) => {
   return (
     <div>
       <Navbar title={"KAS BULANAN"} />
-      <main className="container">
-        <Card
-          className="p-5 flex-row justify-between shadow-lg my-4"
-          shadow="none"
-        >
-          <h3 className="uppercase text-primary font-bold">
-            {dayjs(`${data?.year}-${data?.month}-01`).format("MMMM YYYY")}
-          </h3>
-          <p className="font-bold text-primary">
-            Rp {data?.amount.toLocaleString()}
-          </p>
-        </Card>
-        <Card className="p-5 shadow-lg my-4" shadow="none">
-          <h3 className="text-center font-medium text-base text-success-600">
-            Member Sudah Bayar
-          </h3>
-          <Divider className="my-4" />
-          <div className="flex flex-col gap-4">
-            {data?.paid_users.map((user) => (
-              <div key={user.nik} className="flex items-center">
-                <User
-                  avatarProps={{ src: user.image_url || "" }}
-                  className="me-auto"
-                  description={`${user.nik.toUpperCase()} | ${user.role}`}
-                  name={user.name}
-                />
-              </div>
-            ))}
-            {!data?.paid_users.length && (
-              <p className="text-center text-sm text-foreground-500">
-                Belum ada member yang bayar kas
-              </p>
-            )}
-          </div>
-        </Card>
-        <Card className="p-5 shadow-lg my-4" shadow="none">
-          <h3 className="text-center font-medium text-base text-danger">
-            Member Belum Bayar
-          </h3>
-          <Divider className="my-4" />
-          <div className="flex flex-col gap-4">
-            {data?.unpaid_users.map((user) => (
-              <div key={user.nik} className="flex items-center">
-                <User
-                  avatarProps={{ src: user.image_url || "" }}
-                  className="me-auto"
-                  description={`${user.nik.toUpperCase()} | ${user.role}`}
-                  name={user.name}
-                />
-                <Button
-                  color="primary"
-                  size="sm"
-                  variant="solid"
-                  onPress={() => handleLunas(user)}
-                >
-                  Lunas
-                </Button>
-              </div>
-            ))}
-            {!data?.unpaid_users.length && (
-              <p className="text-center text-sm text-foreground-500">
-                Semua member sudah membayar kas bulan ini.
-              </p>
-            )}
-          </div>
-        </Card>
-      </main>
+      {!!data && (
+        <main className="container">
+          <Card
+            className="p-5 flex-row justify-between shadow-lg my-4"
+            shadow="none"
+          >
+            <h3 className="uppercase text-primary font-bold">
+              {dayjs(`${data.year}-${data.month}-01`).format("MMMM YYYY")}
+            </h3>
+            <p className="font-bold text-primary">
+              Rp {(data.amount * data.paid_count).toLocaleString()}
+            </p>
+          </Card>
+          <Card className="p-5 shadow-lg my-4" shadow="none">
+            <h3 className="text-center font-medium text-base text-success-600">
+              Member Sudah Bayar
+            </h3>
+            <Divider className="my-4" />
+            <div className="flex flex-col gap-4">
+              {data.paid_users.map((user) => (
+                <div key={user.nik} className="flex items-center">
+                  <User
+                    avatarProps={{ src: user.image_url || "" }}
+                    className="me-auto"
+                    description={`${user.nik.toUpperCase()} | ${user.role}`}
+                    name={user.name}
+                  />
+                </div>
+              ))}
+              {!data.paid_users.length && (
+                <p className="text-center text-sm text-foreground-500">
+                  Belum ada member yang bayar kas
+                </p>
+              )}
+            </div>
+          </Card>
+          <Card className="p-5 shadow-lg my-4" shadow="none">
+            <h3 className="text-center font-medium text-base text-danger">
+              Member Belum Bayar
+            </h3>
+            <Divider className="my-4" />
+            <div className="flex flex-col gap-4">
+              {data.unpaid_users.map((user) => (
+                <div key={user.nik} className="flex items-center">
+                  <User
+                    avatarProps={{ src: user.image_url || "" }}
+                    className="me-auto"
+                    description={`${user.nik.toUpperCase()} | ${user.role}`}
+                    name={user.name}
+                  />
+                  <Button
+                    color="primary"
+                    size="sm"
+                    variant="solid"
+                    onPress={() => handleLunas(user)}
+                  >
+                    Lunas
+                  </Button>
+                </div>
+              ))}
+              {!data.unpaid_users.length && (
+                <p className="text-center text-sm text-foreground-500">
+                  Semua member sudah membayar kas bulan ini.
+                </p>
+              )}
+            </div>
+          </Card>
+        </main>
+      )}
     </div>
   );
 };

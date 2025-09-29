@@ -5,3 +5,7 @@
 .container {
   @apply px-4;
 }
+
+.yarl__container {
+  z-index: 99999 !important;
+}
