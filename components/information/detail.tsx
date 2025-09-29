@@ -3,11 +3,12 @@
 import { Button } from "@heroui/button";
 import { Modal, ModalBody, ModalContent, ModalFooter } from "@heroui/modal";
 import React, { useState } from "react";
-import { FaTrash } from "react-icons/fa6";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Pagination, Virtual } from "swiper/modules";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+
+import { TrashIcon } from "../icons";
 
 import dayjs from "@/lib/utils/dayjs";
 import { InformationT } from "@/types";
@@ -21,6 +22,17 @@ type Props = {
 const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteInfo = () => {
+    if (!data) return;
+    if (deleting) return;
+    setDeleting(true);
+    deleteInformation(data)
+      .then((res) => {
+        if (res) onClose();
+      })
+      .finally(() => setDeleting(false));
+  };
 
   return (
     <>
@@ -67,19 +79,11 @@ const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
             <Button
               isIconOnly
               color="danger"
+              isLoading={deleting}
               variant="flat"
-              onPress={() => {
-                if (!data) return;
-                if (deleting) return;
-                setDeleting(true);
-                deleteInformation(data)
-                  .then((res) => {
-                    if (res) onClose();
-                  })
-                  .finally(() => setDeleting(false));
-              }}
+              onPress={handleDeleteInfo}
             >
-              <FaTrash />
+              <TrashIcon />
             </Button>
             <Button onPress={onClose}>Tutup</Button>
           </ModalFooter>

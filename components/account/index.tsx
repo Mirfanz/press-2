@@ -3,11 +3,10 @@
 import { Button } from "@heroui/button";
 import React from "react";
 import { Avatar } from "@heroui/avatar";
-import { FaPencil } from "react-icons/fa6";
 
 import { useAuth } from "../auth-provider";
 import Navbar from "../navbar";
-import { LogoutIcon } from "../icons";
+import { GalleryEditIcon, LogoutIcon } from "../icons";
 
 type Props = {};
 
@@ -20,7 +19,7 @@ const Account = (props: Props) => {
         <Navbar
           endContent={
             <Button isIconOnly size="sm" variant="light" onPress={auth.logout}>
-              <LogoutIcon className="text-foreground-100" size={24} />
+              <LogoutIcon className="text-foreground-100" />
             </Button>
           }
           title="ACCOUNT"
@@ -45,7 +44,7 @@ const Account = (props: Props) => {
               className="ms-auto text-foreground-100"
               variant="flat"
             >
-              <FaPencil />
+              <GalleryEditIcon />
             </Button>
           </div>
         </div>

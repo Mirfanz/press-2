@@ -2,17 +2,18 @@
 
 import React, { useState } from "react";
 import { Button } from "@heroui/button";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { addToast } from "@heroui/toast";
-import { Card } from "@heroui/card";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
+import { TrashIcon } from "../icons";
 
 import DetailModal from "./detail";
 import NewModal from "./new";
+import Info from "./info";
 
 import { InformationT } from "@/types";
 import queryClient from "@/lib/utils/query-client";
@@ -48,7 +49,8 @@ const Information = (props: Props) => {
 
   const deleteInformation = async (information: InformationT) => {
     const ok = await popup.show({
-      icon: <FaTrash className="text-danger" size={75} />,
+      icon: TrashIcon,
+      iconColor: "danger",
       title: "Hapus Info?",
       description: "Informasi ini akan dihapus dan tidak dapat di pulihkan",
       cancelButton: "Batalkan",
@@ -96,28 +98,11 @@ const Information = (props: Props) => {
             {data?.pages
               .flatMap((page) => page.data)
               .map((info: InformationT) => (
-                <Card
-                  key={"info-" + info.id}
-                  isPressable
-                  className=""
-                  radius="sm"
-                  shadow="sm"
-                  onPress={() => setShownInfo(info)}
-                >
-                  <div className="flex px-4 py-3 w-full justify-between items-center">
-                    <p className="line-clamp-1 text-center w-full">
-                      {info.title}
-                    </p>
-                  </div>
-                  <div className="aspect-video w-full rounded-lg overflow-hidden">
-                    <img
-                      alt={info.title}
-                      className="w-full h-full hover:scale-105 duration-200 object-cover"
-                      loading="lazy"
-                      src={info.images[0]}
-                    />
-                  </div>
-                </Card>
+                <Info
+                  key={info.id}
+                  data={info}
+                  showDetail={() => setShownInfo(info)}
+                />
               ))}
             {hasNextPage && (
               <Button variant="flat" onPress={() => fetchNextPage()}>

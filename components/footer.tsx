@@ -11,7 +11,7 @@ import {
   HomeIcon,
   HomeBoldIcon,
   UserIcon,
-  UserIconBold,
+  UserBoldIcon,
   WalletIcon,
   WalletBoldIcon,
 } from "./icons";
@@ -49,7 +49,7 @@ const navItems = [
     label: "Account",
     icon: {
       default: UserIcon,
-      active: UserIconBold,
+      active: UserBoldIcon,
     },
     path: "/account",
     patern: /^\/account.*$/,

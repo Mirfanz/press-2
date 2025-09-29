@@ -5,11 +5,11 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "../auth-provider";
+import { EyeClosedIcon, EyeIcon } from "../icons";
 
 type Props = {};
 
@@ -91,9 +91,9 @@ const Login = (props: Props) => {
                 onPress={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? (
-                  <FaEye className="text-base" />
+                  <EyeIcon className="text-primary" size={20} />
                 ) : (
-                  <FaEyeSlash className="text-base" />
+                  <EyeClosedIcon className="text-primary" size={20} />
                 )}
               </Button>
             }

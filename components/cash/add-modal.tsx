@@ -12,9 +12,9 @@ import {
 import { addToast, Divider, Form, NumberInput } from "@heroui/react";
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
-import { FaBug, FaCircleQuestion } from "react-icons/fa6";
 
 import { usePopup } from "../popup-provider";
+import { CloseSquareIcon, QuestionSquareIcon } from "../icons";
 
 import queryClient from "@/lib/utils/query-client";
 
@@ -46,7 +46,8 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
     const ok = await popup.show({
       title: "Simpan " + (isIncome ? "Pendapatan" : "Pengeluaran"),
       description: "Anda dapat menghapusnya lagi nanti",
-      icon: <FaCircleQuestion className="w-20 h-20 text-primary" />,
+      icon: QuestionSquareIcon,
+      iconColor: "primary",
       confirmButton: "Simpan",
       cancelButton: "Batal",
       confirmColor: "primary",
@@ -80,7 +81,8 @@ const AddModal = ({ isOpen, onClose, onError, onSuccess }: Props) => {
         popup.show({
           title: "Terjadi Kesalahan",
           description: error.response?.data?.message,
-          icon: <FaBug className="w-20 h-20 text-danger" />,
+          icon: CloseSquareIcon,
+          iconColor: "danger",
           cancelButton: "Oke",
         });
       })

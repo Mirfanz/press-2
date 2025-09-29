@@ -2,12 +2,12 @@
 
 import React from "react";
 import { Avatar, Button, Card, Chip, Divider } from "@heroui/react";
-import { FaGear } from "react-icons/fa6";
-import Link from "next/link";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "./auth-provider";
+import { usePopup } from "./popup-provider";
+import { QuestionCircleIcon, SettingIcon } from "./icons";
 
 import queryClient from "@/lib/utils/query-client";
 
@@ -15,6 +15,7 @@ type Props = {};
 
 const Home = (props: Props) => {
   const auth = useAuth();
+  const popup = usePopup();
   const { data: balance } = useQuery(
     {
       queryKey: ["balance"],
@@ -27,6 +28,17 @@ const Home = (props: Props) => {
     },
     queryClient,
   );
+  const show = () => {
+    popup.show({
+      icon: QuestionCircleIcon,
+      // iconColor: "danger",
+      title: "Muhammad Irfan",
+      description: "lskvdjsvdsj kdsbakjdas kdjaskdas dkdkjsa askdj jasds",
+      cancelButton: "Batal",
+      confirmButton: "Kirim",
+      // confirmColor: "",
+    });
+  };
 
   return (
     <main>
@@ -48,8 +60,14 @@ const Home = (props: Props) => {
             {auth.user?.role}
           </small>
         </div>
-        <Button isIconOnly className="ml-auto" color="primary" variant="solid">
-          <FaGear className="text-lg" />
+        <Button
+          isIconOnly
+          className="ml-auto"
+          color="primary"
+          variant="solid"
+          onPress={show}
+        >
+          <SettingIcon />
         </Button>
       </div>
       <div className="container">
@@ -66,7 +84,7 @@ const Home = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="container my-6">
+      {/* <div className="container my-6">
         <div className="flex items-center justify-between mb-1">
           <h3>Laporan Keuangan</h3>
           <Button as={Link} href="/cash" size="sm" variant="light">
@@ -75,18 +93,13 @@ const Home = (props: Props) => {
         </div>
         <div className="flex flex-col gap-3">
           {[1, 2, 3].map((item) => (
-            <div
-              key={"report-" + item}
-              className="justify-between flex bg-white rounded-2xl items-center flex-row p-4"
-            >
-              <p className="text-sm line-clamp-1 text-foreground-500">
-                Lorem ipsum dolor sit amet.
-              </p>
+            <div key={"report-" + item} className="justify-between flex bg-white rounded-2xl items-center flex-row p-4">
+              <p className="text-sm line-clamp-1 text-foreground-500">Lorem ipsum dolor sit amet.</p>
               <p className="text-success-600 font-medium">+24.000</p>
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="container my-6">
         <div className="flex flex-col gap-4">
           <Card className="w-full p-6 pt-4">

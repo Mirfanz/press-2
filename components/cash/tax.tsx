@@ -3,13 +3,13 @@
 import React from "react";
 import { Card } from "@heroui/card";
 import { Divider } from "@heroui/divider";
-import { FaUserCheck, FaUserXmark } from "react-icons/fa6";
 import { Button } from "@heroui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
 
 import Navbar from "../navbar";
+import { UserCheckBoldIcon, UserCrossBoldIcon } from "../icons";
 
 import { TaxT } from "@/types";
 import dayjs from "@/lib/utils/dayjs";
@@ -62,13 +62,16 @@ const Tax = (props: Props) => {
                   </div>
                   <Divider className="mx-0 h-auto" orientation="vertical" />
                   <div className="w-full flex flex-col gap-1">
-                    <div className="flex text-xs items-center">
-                      <FaUserCheck className="text-sm text-success-600" />
-                      <p className="ms-2">{tax.paid_count} Orang</p>
+                    <div className="flex text-xs items-end">
+                      <UserCheckBoldIcon
+                        className="text-success-600"
+                        size={18}
+                      />
+                      <p className="ms-1">{tax.paid_count} Orang</p>
                     </div>
-                    <div className="flex text-xs items-center">
-                      <FaUserXmark className="text-sm text-danger" />
-                      <p className="ms-2">{tax.unpaid_count} Orang</p>
+                    <div className="flex text-xs items-end">
+                      <UserCrossBoldIcon className="text-danger" size={18} />
+                      <p className="ms-1">{tax.unpaid_count} Orang</p>
                     </div>
                     <Button
                       as={Link}

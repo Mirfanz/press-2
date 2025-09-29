@@ -4,9 +4,9 @@ import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { Modal, ModalBody, ModalContent, ModalFooter } from "@heroui/modal";
 import React from "react";
-import { FaTrash } from "react-icons/fa6";
 
 import { useAuth } from "../auth-provider";
+import { TrashIcon } from "../icons";
 
 import dayjs from "@/lib/utils/dayjs";
 import { TransactionT } from "@/types";
@@ -60,7 +60,7 @@ const DetailModal = ({ data, onClose, deleteTransaction }: Props) => {
                 if (data) deleteTransaction(data.id);
               }}
             >
-              <FaTrash className="text-base" />
+              <TrashIcon />
             </Button>
           )}
           <Button onPress={onClose}>Tutup</Button>

@@ -8,11 +8,11 @@ import { Card } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { User } from "@heroui/user";
 import { Button } from "@heroui/button";
-import { FaQuestion } from "react-icons/fa6";
 import { addToast } from "@heroui/toast";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
+import { CloseSquareIcon, QuestionCircleIcon } from "../icons";
 
 import { TaxT, UserT } from "@/types";
 import dayjs from "@/lib/utils/dayjs";
@@ -37,7 +37,7 @@ const TaxDetail = (props: Props) => {
 
   const handleLunas = async (user: UserT) => {
     const ok = await popup.show({
-      icon: <FaQuestion className="text-warning" size={75} />,
+      icon: QuestionCircleIcon,
       title: "Konfirmasi?",
       description: `Konfirmasi ${user.name} sudah membayar kas bulan ini`,
       cancelButton: "Batalkan",
@@ -53,6 +53,8 @@ const TaxDetail = (props: Props) => {
       })
       .catch((error) => {
         popup.show({
+          icon: CloseSquareIcon,
+          iconColor: "danger",
           title: "Terjadi Kesalan",
           description: `Gagal mengkonfirmasi pembayaran kas ${user.name}`,
         });

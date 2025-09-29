@@ -12,13 +12,6 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
-import {
-  FaBugs,
-  FaFileImage,
-  FaPaperPlane,
-  FaTrash,
-  FaTrashCan,
-} from "react-icons/fa6";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Pagination, Virtual } from "swiper/modules";
 import axios from "axios";
@@ -26,6 +19,13 @@ import { addToast } from "@heroui/toast";
 import { v4 } from "uuid";
 
 import { usePopup } from "../popup-provider";
+import {
+  CloseSquareIcon,
+  GalleryAddIcon,
+  QuestionCircleIcon,
+  TrashBoldIcon,
+  TrashIcon,
+} from "../icons";
 
 import queryClient from "@/lib/utils/query-client";
 import { supabase } from "@/lib/utils/supabase";
@@ -85,7 +85,8 @@ const NewModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     if (isLoading) return;
     const ok = await popup.show({
       title: "Hapus Foto?",
-      icon: <FaTrashCan className="text-danger" size={50} />,
+      icon: TrashIcon,
+      iconColor: "danger",
       description: "Apakah anda yakin ingin menghapus foto",
       confirmButton: "Hapus",
       confirmColor: "danger",
@@ -110,7 +111,7 @@ const NewModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     e.preventDefault();
     if (isLoading) return;
     const ok = await popup.show({
-      icon: <FaPaperPlane className="text-primary" size={50} />,
+      icon: QuestionCircleIcon,
       title: "Upload Informasi?",
       description: "Pastikan data yang anda masukan sudah benar",
       confirmButton: "Upload",
@@ -147,13 +148,12 @@ const NewModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
       .catch((error) => {
         popup.show({
           title: "Upload Gagal",
-          icon: <FaBugs className="text-danger" size={50} />,
+          icon: CloseSquareIcon,
           description:
             error?.response?.data?.message ||
             error?.message ||
             "Terjadi kesalahan saat menambah informasi.",
           confirmButton: "Tutup",
-          //   confirmColor: "danger",
         });
       })
       .finally(() => setIsLoading(false));
@@ -191,7 +191,7 @@ const NewModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
                       variant="flat"
                       onPress={() => handleDeleteImage(item.preview_url)}
                     >
-                      <FaTrash className="text-base" />
+                      <TrashBoldIcon className="text-base" />
                     </Button>
                   </div>
                 </SwiperSlide>
@@ -204,7 +204,7 @@ const NewModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
                       type="button"
                       onClick={handleAddImage}
                     >
-                      <FaFileImage size={40} />
+                      <GalleryAddIcon size={40} />
                       <p>Add Image</p>
                     </button>
                   </div>

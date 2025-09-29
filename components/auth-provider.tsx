@@ -51,7 +51,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         popup.show({
           title: "Selamat Datang",
           description: `Halo ${resp.data.data.user.name}`,
-          icon: <CheckReadIcon className="w-16 h-16 text-success" />,
+          icon: CheckReadIcon,
+          iconColor: "success",
           cancelButton: "Oke",
         });
 
@@ -68,7 +69,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         popup.show({
           title: "Login Gagal",
           description: "Pastikan nik dan password yang anda masukan benar",
-          icon: <CloseSquareIcon className="w-16 h-16 text-danger" />,
+          icon: CloseSquareIcon,
+          iconColor: "danger",
           cancelButton: "Oke",
         });
         setError(
@@ -84,7 +86,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     const ok = await popup.show({
       title: "Yakin Logout?",
       description: `Apakah anda yakin ingin keluar dari akun ${user?.name}`,
-      icon: <LogoutIcon className="w-16 h-16 text-danger" />,
+      icon: LogoutIcon,
       confirmButton: "Logout",
       cancelButton: "Batal",
       confirmColor: "danger",

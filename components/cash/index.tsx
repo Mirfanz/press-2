@@ -4,12 +4,12 @@ import React from "react";
 import { Button } from "@heroui/button";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { FaPlus, FaTrash } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { addToast } from "@heroui/toast";
 import Link from "next/link";
 
 import Navbar from "../navbar";
-import { HandMoneyIcon } from "../icons";
+import { HandMoneyIcon, TrashIcon } from "../icons";
 import { usePopup } from "../popup-provider";
 import { useAuth } from "../auth-provider";
 
@@ -75,7 +75,8 @@ const Cash = (props: Props) => {
       !(await popup.show({
         title: "Hapus Transaksi",
         description: "Data yang sudah dihapus tidak dapat dikembalikan",
-        icon: <FaTrash className="w-20 h-20 text-danger" />,
+        icon: TrashIcon,
+        iconColor: "danger",
         confirmButton: "Hapus",
         cancelButton: "Batal",
         confirmColor: "danger",
@@ -109,7 +110,7 @@ const Cash = (props: Props) => {
                   isIconOnly
                   className="text-foreground-100"
                   size="sm"
-                  variant="light"
+                  variant="bordered"
                   onPress={() => setIsAddModalOpen(true)}
                 >
                   <FaPlus size={18} />

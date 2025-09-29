@@ -1,15 +1,33 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  FC,
+} from "react";
 import { Modal, ModalContent, Button } from "@heroui/react";
+import clsx from "clsx";
+
+import { IconSvgProps } from "@/types";
+
+type Colors =
+  | "primary"
+  | "warning"
+  | "danger"
+  | "default"
+  | "secondary"
+  | "success";
 
 type PopupOptions = {
-  icon?: ReactNode;
+  icon?: FC<IconSvgProps>;
   title?: string;
   description?: string;
   confirmButton?: string;
   cancelButton?: string;
-  confirmColor?: "primary" | "danger";
+  confirmColor?: Colors;
+  iconColor?: Colors;
 };
 
 type PopupContextType = {
@@ -65,7 +83,14 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
       >
         <ModalContent>
           <div className="flex flex-col items-center justify-center gap-4 p-6">
-            {options.icon}
+            {!!options.icon && (
+              <options.icon
+                className={clsx(
+                  "w-22 h-22 mt-3 mb-1",
+                  `text-${options.iconColor || "primary"}`,
+                )}
+              />
+            )}
             <p className="text-xl font-semibold text-foreground-700">
               {options.title}
             </p>

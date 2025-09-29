@@ -21,7 +21,9 @@ const Transaction = ({ data, showDetail }: Props) => {
       shadow="sm"
       onPress={() => showDetail?.(data)}
     >
-      <p className="text-sm text-foreground-800 line-clamp-1">{data.title}</p>
+      <p className="text-sm text-start text-foreground-800 line-clamp-1">
+        {data.title}
+      </p>
       <p
         className={clsx(
           "font-medium",
