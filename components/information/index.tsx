@@ -113,6 +113,7 @@ const Information = (props: Props) => {
                     <img
                       alt={info.title}
                       className="w-full h-full hover:scale-105 duration-200 object-cover"
+                      loading="lazy"
                       src={info.images[0]}
                     />
                   </div>

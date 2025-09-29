@@ -44,6 +44,7 @@ const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
                       <img
                         alt={"image " + index}
                         className="w-full aspect-video rounded-xl object-cover border-1 border-solid border-foreground-300"
+                        loading="lazy"
                         src={img}
                       />
                     </button>
