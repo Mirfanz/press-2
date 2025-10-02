@@ -2,6 +2,9 @@ import { Suspense } from "react";
 
 import Footer from "@/components/footer";
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/plugins/counter.css";
+
 import "swiper/css";
 import "swiper/css/virtual";
 import "swiper/css/pagination";

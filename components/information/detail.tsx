@@ -7,6 +7,7 @@ import { SwiperSlide, Swiper } from "swiper/react";
 import { Pagination, Virtual } from "swiper/modules";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Counter from "yet-another-react-lightbox/plugins/counter";
 
 import { TrashIcon } from "../icons";
 
@@ -92,7 +93,7 @@ const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
       <Lightbox
         close={() => setOpen(false)}
         open={open}
-        plugins={[Zoom]}
+        plugins={[Zoom, Counter]}
         slides={data?.images.map((img) => ({ src: img }))}
       />
     </>
