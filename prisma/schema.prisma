@@ -15,22 +15,22 @@ datasource db {
 }
 
 enum Role {
-  Admin
   Leader
   Subleader
   Bendahara
   Operator
+  Admin
 }
 
 model User {
   nik        String   @id
   password   String
   name       String
-  image_url  String
+  image_url  String?
   role       Role     @default(Operator)
   active     Boolean  @default(true)
-  created_at DateTime
-  updated_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   unpaid_taxes Tax[]         @relation("Unpaid User")
   paid_taxes   Tax[]         @relation("Paid User")

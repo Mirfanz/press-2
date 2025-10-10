@@ -1,21 +1,58 @@
 "use client";
 
 import { Button } from "@heroui/button";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar } from "@heroui/avatar";
+import { Input } from "@heroui/input";
+import { Card } from "@heroui/card";
+import { FaPencil, FaPlus, FaWhatsapp } from "react-icons/fa6";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Spinner } from "@heroui/spinner";
 
-import { useAuth } from "../auth-provider";
+import { GalleryEditIcon, LogoutIcon, SearchIcon } from "../icons";
 import Navbar from "../navbar";
-import { GalleryEditIcon, LogoutIcon } from "../icons";
+import { useAuth } from "../auth-provider";
+
+import NewUserModal from "./new";
+
+import { UserT } from "@/types";
+import queryClient from "@/lib/utils/query-client";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {};
 
 const Account = (props: Props) => {
   const auth = useAuth();
+  const [searchField, setSearchField] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery(
+      {
+        queryKey: ["users"],
+        initialPageParam: 1,
+        queryFn: async ({ pageParam }) => {
+          const res = await axios.get("/api/user", {
+            params: { page: pageParam },
+          });
+
+          console.log("res", res);
+
+          return res.data;
+        },
+        getNextPageParam: (lastPage) => {
+          if (lastPage.meta.totalPages > lastPage.meta.page)
+            return lastPage.meta.page + 1;
+
+          return undefined;
+        },
+      },
+      queryClient,
+    );
 
   return (
     <main>
-      <div className="sticky top-0">
+      <div className="sticky top-0 z-50">
         <Navbar
           endContent={
             <Button isIconOnly size="sm" variant="light" onPress={auth.logout}>
@@ -24,7 +61,7 @@ const Account = (props: Props) => {
           }
           title="ACCOUNT"
         />
-        <div className="bg-primary p-6 pt-2 shadow-2xl shadow-primary rounded-b-3xl">
+        <div className="bg-primary p-6 pt-2 shadow-md rounded-b-2xl">
           <div className="flex gap-4 items-center">
             <Avatar
               className=""
@@ -49,44 +86,84 @@ const Account = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="container py-4">
-        <p className="text-justify">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem, ipsa
-          repudiandae nesciunt eligendi deleniti doloremque ab velit quod! Fuga
-          dolorem laborum doloremque ipsum iste expedita odit voluptate. Harum
-          corporis porro ex consequatur, est sunt sit ad illo eaque laborum ea
-          dignissimos ut excepturi iste dicta aut sapiente cum dolores, debitis
-          perferendis hic deserunt tempore. Corrupti est accusantium ea?
-          Temporibus delectus incidunt repellendus dolor nostrum repellat
-          quaerat sed, cumque deserunt! Fuga sequi dolorum natus facilis
-          doloremque quam distinctio modi repellendus officia ex! Dignissimos
-          aut deleniti vitae itaque obcaecati culpa laudantium fugit! Magnam
-          veniam voluptate impedit dolor praesentium dolores molestiae atque
-          corrupti quisquam, ducimus enim saepe et vero dolorem id ullam quae
-          sed at modi, provident cumque quaerat dolore mollitia repudiandae.
-          Illum at eos dolore odio! Mollitia quos dicta autem distinctio
-          architecto eaque reiciendis quae voluptatibus? Enim accusamus
-          laudantium, dolores eveniet cum blanditiis laborum adipisci cumque
-          inventore laboriosam esse alias suscipit voluptatem veniam eaque eius
-          impedit non officiis provident? Ex, sit doloribus quisquam fuga
-          itaque, quibusdam dicta aliquam vel obcaecati quas illo illum
-          necessitatibus. Non illo est ipsum nesciunt iste voluptates. Illo
-          ipsam ullam corporis odit distinctio aliquid quaerat, quas animi velit
-          excepturi voluptate ducimus iure quae! Labore, deserunt sequi! Maiores
-          quis voluptatem ducimus dicta consequatur deserunt dignissimos odio
-          officiis asperiores ratione nulla magnam ipsam quibusdam in harum aut
-          aliquid doloribus voluptas facilis quos, nam quae mollitia quia? Quia
-          architecto ab incidunt nisi totam dolores, optio deleniti beatae
-          doloremque adipisci ex recusandae autem obcaecati aliquid neque maxime
-          sint, quae voluptates culpa provident odio dolorum officia? Eos
-          perspiciatis voluptatibus asperiores eveniet delectus sit earum in
-          autem, sed officia ipsum incidunt ad inventore cumque rem dignissimos.
-          Suscipit similique sed cum fugiat! Consequatur, harum. Cum odio,
-          inventore ipsam perspiciatis veniam quae illo facere minima alias rem
-          iste sapiente voluptate, facilis optio fugiat! Commodi, reprehenderit
-          earum?
-        </p>
+      <div className="container py-6">
+        <div className="flex gap-2">
+          <Input
+            isClearable
+            color="primary"
+            placeholder="Temukan sesuatu disini..."
+            size="lg"
+            startContent={<SearchIcon className="me-1" />}
+            value={searchField}
+            variant="flat"
+            onValueChange={(val) => setSearchField(val)}
+          />
+          <Button
+            isIconOnly
+            color="primary"
+            size="lg"
+            onPress={() => setShowAddModal(true)}
+          >
+            <FaPlus className="text-xl" />
+          </Button>
+        </div>
+        <div className="flex flex-col gap-3 my-6">
+          {isLoading && <Spinner />}
+          {data?.pages
+            .flatMap((page) => page.data)
+            .map((item: UserT) => (
+              <Card key={item.nik} fullWidth className="p-4 flex-row gap-4">
+                <Avatar
+                  className="h-16 aspect-square min-w-max"
+                  imgProps={{ src: item.image_url || undefined }}
+                  radius="md"
+                />
+                <div className="text-start w-full flex flex-col gap-0.5">
+                  <p className="text-sm">{item.name}</p>
+                  <p className="text-xs text-foreground-500">
+                    NIK : {item.nik.toUpperCase()}
+                  </p>
+                  <p className="text-xs text-foreground-500">
+                    Role : {item.role}
+                  </p>
+                  <p className="text-xs text-foreground-500">
+                    Status :
+                    {item.active ? (
+                      <span className="text-success"> Masih Bekerja</span>
+                    ) : (
+                      <span className="text-danger"> Nonaktif</span>
+                    )}
+                  </p>
+                  <p className="text-xs text-foreground-500">
+                    Dibuat : {dayjs(item.created_at).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+                <div className=" flex flex-col gap-1">
+                  <Button isIconOnly size="sm" variant="flat">
+                    <FaWhatsapp className="text-lg" />
+                  </Button>
+                  <Button isIconOnly size="sm" variant="flat">
+                    <FaPencil className="" />
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          {hasNextPage && (
+            <Button
+              className="mx-auto my-2"
+              isLoading={isFetchingNextPage}
+              variant="flat"
+              onPress={() => fetchNextPage()}
+            >
+              Show More
+            </Button>
+          )}
+        </div>
       </div>
+      <NewUserModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+      />
     </main>
   );
 };

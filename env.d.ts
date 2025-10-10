@@ -5,5 +5,6 @@ declare namespace NodeJS {
     SALT_ROUNDS: string;
     NEXT_PUBLIC_SB_PUBLIC_KEY: string;
     NEXT_PUBLIC_SB_PROJECT_URL: string;
+    DEFAULT_PASSWORD: string;
   }
 }

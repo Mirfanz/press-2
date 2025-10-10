@@ -7,6 +7,7 @@ import { Button } from "@heroui/button";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
+import { Spinner } from "@heroui/spinner";
 
 import Navbar from "../navbar";
 import { UserCheckBoldIcon, UserCrossBoldIcon } from "../icons";
@@ -18,7 +19,7 @@ import queryClient from "@/lib/utils/query-client";
 type Props = {};
 
 const Tax = (props: Props) => {
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery(
       {
         queryKey: ["taxes"],
@@ -46,6 +47,7 @@ const Tax = (props: Props) => {
       <Navbar title="KAS BULANAN" />
       <main className="container py-4">
         <div className="flex flex-col gap-4">
+          {isLoading && <Spinner />}
           {data?.pages
             .flatMap((page) => page.data)
             .map((tax: TaxT) => (

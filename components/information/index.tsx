@@ -6,6 +6,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { addToast } from "@heroui/toast";
+import { Spinner } from "@heroui/spinner";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
@@ -95,6 +96,7 @@ const Information = (props: Props) => {
       <main className="py-4">
         <div className="container">
           <div className="flex flex-col gap-5">
+            {isLoading && <Spinner />}
             {data?.pages
               .flatMap((page) => page.data)
               .map((info: InformationT) => (

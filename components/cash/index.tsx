@@ -7,6 +7,7 @@ import axios from "axios";
 import { FaPlus } from "react-icons/fa6";
 import { addToast } from "@heroui/toast";
 import Link from "next/link";
+import { Spinner } from "@heroui/spinner";
 
 import Navbar from "../navbar";
 import { HandMoneyIcon, TrashIcon } from "../icons";
@@ -45,7 +46,7 @@ const Cash = (props: Props) => {
     null,
   );
 
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, refetch } =
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery(
       {
         queryKey: ["transactions"],
@@ -142,6 +143,7 @@ const Cash = (props: Props) => {
       <main>
         <div className="container my-4">
           <div className="flex flex-col gap-3">
+            {isLoading && <Spinner />}
             {data?.pages
               .flatMap((page) => page.data)
               .map((item: TransactionT, id) => {

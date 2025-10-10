@@ -9,6 +9,7 @@ import { Divider } from "@heroui/divider";
 import { User } from "@heroui/user";
 import { Button } from "@heroui/button";
 import { addToast } from "@heroui/toast";
+import { Spinner } from "@heroui/spinner";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
@@ -64,6 +65,11 @@ const TaxDetail = (props: Props) => {
   return (
     <div>
       <Navbar title={"KAS BULANAN"} />
+      {isLoading && (
+        <div className="flex justify-center p-4">
+          <Spinner />
+        </div>
+      )}
       {!!data && (
         <main className="container">
           <Card
