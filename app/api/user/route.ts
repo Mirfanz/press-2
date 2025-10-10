@@ -25,15 +25,19 @@ export async function GET(req: NextRequest) {
 
     const params = req.nextUrl.searchParams;
     const page: number = parseInt(params.get("page") || "1") || 1;
-    const limit = 5;
+    const limit = 20;
 
     const result = await prisma.user.findMany({
       take: limit,
+      where: { role: { not: Role.Admin } },
       skip: (page - 1) * limit,
       orderBy: [{ active: "desc" }, { role: "asc" }, { created_at: "asc" }],
       omit: { password: true, updated_at: true },
     });
-    const totalPages = Math.ceil((await prisma.user.count()) / limit);
+    const totalPages = Math.ceil(
+      (await prisma.user.count({ where: { role: { not: Role.Admin } } })) /
+        limit,
+    );
 
     const data: UserT[] = result.map((item) => ({
       nik: item.nik,
@@ -112,7 +116,7 @@ export async function POST(req: NextRequest) {
     const result = await prisma.user.create({
       data: {
         name: parse.data.name,
-        nik: parse.data.nik,
+        nik: parse.data.nik.toLowerCase(),
         password: password,
         role: parse.data.role,
       },

@@ -63,11 +63,7 @@ const Account = (props: Props) => {
         />
         <div className="bg-primary p-6 pt-2 shadow-md rounded-b-2xl">
           <div className="flex gap-4 items-center">
-            <Avatar
-              className=""
-              imgProps={{ src: auth.user?.image_url || undefined }}
-              size="lg"
-            />
+            <Avatar size="lg" src={auth.user?.image_url || undefined} />
             <div className="">
               <h4 className="text-foreground-100 font-medium text-lg">
                 {auth.user?.name}
@@ -115,8 +111,8 @@ const Account = (props: Props) => {
               <Card key={item.nik} fullWidth className="p-4 flex-row gap-4">
                 <Avatar
                   className="h-16 aspect-square min-w-max"
-                  imgProps={{ src: item.image_url || undefined }}
                   radius="md"
+                  src={item.image_url || undefined}
                 />
                 <div className="text-start w-full flex flex-col gap-0.5">
                   <p className="text-sm">{item.name}</p>
