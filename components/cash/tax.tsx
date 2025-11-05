@@ -10,7 +10,6 @@ import Link from "next/link";
 import { Spinner } from "@heroui/spinner";
 
 import Navbar from "../navbar";
-import { UserCheckBoldIcon, UserCrossBoldIcon } from "../icons";
 
 import { TaxT } from "@/types";
 import dayjs from "@/lib/utils/dayjs";
@@ -51,41 +50,50 @@ const Tax = (props: Props) => {
           {data?.pages
             .flatMap((page) => page.data)
             .map((tax: TaxT) => (
-              <Card key={tax.id} className="p-4 shadow-lg" shadow="none">
+              <Card
+                key={tax.id}
+                isPressable
+                as={Link}
+                className="p-4 shadow-lg"
+                href={`/cash/tax/${tax.id}`}
+                shadow="none"
+              >
                 <h3 className="text-center mb-3 uppercase text-primary font-bold">
                   {dayjs(`${tax.year}-${tax.month}-01`).format("MMMM YYYY")}
                 </h3>
                 <div className="flex gap-4">
                   <div className="flex w-full flex-col items-center justify-center gap-1">
-                    <p className="text-xs text-foreground-600">Total Dana</p>
+                    <p className="text-xs text-foreground-600">Terkumpul :</p>
                     <p className="text-lg font-medium text-foreground-800">
                       Rp {(tax.amount * tax.paid_count).toLocaleString()}
                     </p>
                   </div>
                   <Divider className="mx-0 h-auto" orientation="vertical" />
-                  <div className="w-full flex flex-col gap-1">
+                  <div className="flex w-full items-center justify-evenly gap-2">
+                    <div className="text-center text-success">
+                      <p className="text-sm  font-semibold">{tax.paid_count}</p>
+                      <p className="text-xs">Sudah</p>
+                    </div>
+                    <div className="text-center text-danger">
+                      <p className="text-sm font-semibold">
+                        {tax.unpaid_count}
+                      </p>
+                      <p className="text-xs">Belum</p>
+                    </div>
+                  </div>
+                  {/* <div className="w-full flex flex-col gap-1">
                     <div className="flex text-xs items-end">
-                      <UserCheckBoldIcon
-                        className="text-success-600"
-                        size={18}
-                      />
+                      <UserCheckBoldIcon className="text-success-600" size={18} />
                       <p className="ms-1">{tax.paid_count} Orang</p>
                     </div>
                     <div className="flex text-xs items-end">
                       <UserCrossBoldIcon className="text-danger" size={18} />
                       <p className="ms-1">{tax.unpaid_count} Orang</p>
                     </div>
-                    <Button
-                      as={Link}
-                      className="mt-1"
-                      color="default"
-                      href={`/cash/tax/${tax.id}`}
-                      size="sm"
-                      variant="flat"
-                    >
+                    <Button as={Link} className="mt-1" color="default" href={`/cash/tax/${tax.id}`} size="sm" variant="flat">
                       Lihat Detail
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               </Card>
             ))}
