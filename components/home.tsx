@@ -43,14 +43,7 @@ const Home = (props: Props) => {
   return (
     <main>
       <div className="flex px-5 py-6 gap-4 items-center">
-        <Avatar
-          isBordered
-          imgProps={{
-            src: auth.user?.image_url || undefined,
-            alt: "Avatar " + auth.user?.name,
-          }}
-          size="md"
-        />
+        <Avatar isBordered size="md" src={auth.user?.image_url || undefined} />
         <div className="">
           <h3 className="text-sm font-medium -mb-1 text-foreground-800">
             {auth.user?.name}

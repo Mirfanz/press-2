@@ -3,18 +3,30 @@
 import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { Avatar } from "@heroui/avatar";
-import { Input } from "@heroui/input";
 import { Card } from "@heroui/card";
-import { FaPencil, FaPlus, FaWhatsapp } from "react-icons/fa6";
+import { FaPencil, FaWhatsapp } from "react-icons/fa6";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Spinner } from "@heroui/spinner";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@heroui/react";
 
-import { GalleryEditIcon, LogoutIcon, SearchIcon } from "../icons";
+import {
+  GalleryEditIcon,
+  LockPasswordIcon,
+  LogoutIcon,
+  SettingIcon,
+  UserPlusIcon,
+} from "../icons";
 import Navbar from "../navbar";
 import { useAuth } from "../auth-provider";
 
 import NewUserModal from "./new";
+import ChangePasswordModal from "./change-password";
 
 import { UserT } from "@/types";
 import queryClient from "@/lib/utils/query-client";
@@ -26,6 +38,7 @@ const Account = (props: Props) => {
   const auth = useAuth();
   const [searchField, setSearchField] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery(
       {
@@ -51,41 +64,135 @@ const Account = (props: Props) => {
     );
 
   return (
-    <main>
-      <div className="sticky top-0 z-50">
-        <Navbar
-          endContent={
-            <Button isIconOnly size="sm" variant="light" onPress={auth.logout}>
-              <LogoutIcon className="text-foreground-100" />
-            </Button>
-          }
-          title="ACCOUNT"
-        />
-        <div className="bg-primary p-6 pt-2 shadow-md rounded-b-2xl">
+    <div>
+      <Navbar
+        endContent={
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            onPress={() => setShowAddModal(true)}
+          >
+            <UserPlusIcon className="text-foreground-100" />
+          </Button>
+        }
+        title="ACCOUNT"
+      />
+      <main className="relative">
+        {/* <div className="bg-primary p-6 pt-2 shadow-md rounded-b-2xl">
           <div className="flex gap-4 items-center">
             <Avatar size="lg" src={auth.user?.image_url || undefined} />
             <div className="">
-              <h4 className="text-foreground-100 font-medium text-lg">
-                {auth.user?.name}
-              </h4>
+              <h4 className="text-foreground-100 font-medium text-lg">{auth.user?.name}</h4>
               <p className="text-sm text-foreground-300">
                 {auth.user?.nik.toUpperCase()} | {auth.user?.role}
               </p>
             </div>
+            <Dropdown className="min-w-0">
+              <DropdownTrigger>
+                <Button isIconOnly className="ms-auto text-foreground-100" variant="flat">
+                  <SettingIcon />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu className="w-max">
+                <DropdownItem key={"profil"} startContent={<GalleryEditIcon size={16} />}>
+                  Ubah Foto
+                </DropdownItem>
+                <DropdownItem
+                  key={"password"}
+                  startContent={<LockPasswordIcon size={16} />}
+                  onPress={() => setShowChangePassword(true)}
+                >
+                  Ganti Password
+                </DropdownItem>
+                <DropdownItem
+                  key={"delete"}
+                  className="text-danger"
+                  color="danger"
+                  startContent={<LogoutIcon size={16} />}
+                  onPress={() => auth.logout()}
+                >
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </div> */}
+        <div className="p-6 rounded-b-2xl flex w-full flex-row gap-4 bg-primary">
+          <Avatar
+            className="h-16 aspect-square min-w-max"
+            radius="md"
+            src={auth.user?.image_url || undefined}
+          />
+          <div className="text-start w-full flex flex-col gap-0.5">
+            <p className="text-sm text-primary-foreground font-semibold mb-1">
+              {auth.user?.name}
+            </p>
+            <p className="text-xs text-foreground-300">
+              NIK : {auth.user?.nik.toUpperCase()}
+            </p>
+            <p className="text-xs text-foreground-300">
+              Role : {auth.user?.role}
+            </p>
+            <p className="text-xs text-foreground-300">
+              Status :
+              {auth.user?.active ? (
+                <span className="text-success"> Masih Bekerja</span>
+              ) : (
+                <span className="text-danger"> Nonaktif</span>
+              )}
+            </p>
+            <p className="text-xs text-foreground-300">
+              Dibuat : {dayjs(auth.user?.created_at).format("DD/MM/YYYY")}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Dropdown className="min-w-0">
+              <DropdownTrigger>
+                <Button isIconOnly color="warning" variant="light">
+                  <SettingIcon size={24} />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu className="w-max">
+                <DropdownItem
+                  key={"profil"}
+                  startContent={<GalleryEditIcon size={16} />}
+                >
+                  Ubah Foto
+                </DropdownItem>
+                <DropdownItem
+                  key={"password"}
+                  startContent={<LockPasswordIcon size={16} />}
+                  onPress={() => setShowChangePassword(true)}
+                >
+                  Ganti Password
+                </DropdownItem>
+                <DropdownItem
+                  key={"delete"}
+                  className="text-danger"
+                  color="danger"
+                  startContent={<LogoutIcon size={16} />}
+                  onPress={() => auth.logout()}
+                >
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
             <Button
               isIconOnly
-              className="ms-auto text-foreground-100"
-              variant="flat"
+              color="danger"
+              size="md"
+              variant="light"
+              onPress={auth.logout}
             >
-              <GalleryEditIcon />
+              <LogoutIcon size={24} />
             </Button>
           </div>
         </div>
-      </div>
-      <div className="container py-6">
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2 sticky top-16 mb-4 z-10 bg-background pt-4">
           <Input
             isClearable
+            className="mb-6"
             color="primary"
             placeholder="Temukan sesuatu disini..."
             size="lg"
@@ -94,73 +201,71 @@ const Account = (props: Props) => {
             variant="flat"
             onValueChange={(val) => setSearchField(val)}
           />
-          <Button
-            isIconOnly
-            color="primary"
-            size="lg"
-            onPress={() => setShowAddModal(true)}
-          >
-            <FaPlus className="text-xl" />
-          </Button>
+        </div> */}
+        <div className="container py-6">
+          <div className="flex flex-col gap-3">
+            {isLoading && <Spinner />}
+            {data?.pages
+              .flatMap((page) => page.data)
+              .map((item: UserT) => (
+                <Card key={item.nik} fullWidth className="p-4 flex-row gap-4">
+                  <Avatar
+                    className="h-16 aspect-square min-w-max"
+                    radius="md"
+                    src={item.image_url || undefined}
+                  />
+                  <div className="text-start w-full flex flex-col gap-0.5">
+                    <p className="text-sm">{item.name}</p>
+                    <p className="text-xs text-foreground-500">
+                      NIK : {item.nik.toUpperCase()}
+                    </p>
+                    <p className="text-xs text-foreground-500">
+                      Role : {item.role}
+                    </p>
+                    <p className="text-xs text-foreground-500">
+                      Status :
+                      {item.active ? (
+                        <span className="text-success"> Masih Bekerja</span>
+                      ) : (
+                        <span className="text-danger"> Nonaktif</span>
+                      )}
+                    </p>
+                    <p className="text-xs text-foreground-500">
+                      Dibuat : {dayjs(item.created_at).format("DD/MM/YYYY")}
+                    </p>
+                  </div>
+                  <div className=" flex flex-col gap-1">
+                    <Button isIconOnly size="sm" variant="flat">
+                      <FaWhatsapp className="text-lg" />
+                    </Button>
+                    <Button isIconOnly size="sm" variant="flat">
+                      <FaPencil className="" />
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            {hasNextPage && (
+              <Button
+                className="mx-auto my-2"
+                isLoading={isFetchingNextPage}
+                variant="flat"
+                onPress={() => fetchNextPage()}
+              >
+                Show More
+              </Button>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-3 my-6">
-          {isLoading && <Spinner />}
-          {data?.pages
-            .flatMap((page) => page.data)
-            .map((item: UserT) => (
-              <Card key={item.nik} fullWidth className="p-4 flex-row gap-4">
-                <Avatar
-                  className="h-16 aspect-square min-w-max"
-                  radius="md"
-                  src={item.image_url || undefined}
-                />
-                <div className="text-start w-full flex flex-col gap-0.5">
-                  <p className="text-sm">{item.name}</p>
-                  <p className="text-xs text-foreground-500">
-                    NIK : {item.nik.toUpperCase()}
-                  </p>
-                  <p className="text-xs text-foreground-500">
-                    Role : {item.role}
-                  </p>
-                  <p className="text-xs text-foreground-500">
-                    Status :
-                    {item.active ? (
-                      <span className="text-success"> Masih Bekerja</span>
-                    ) : (
-                      <span className="text-danger"> Nonaktif</span>
-                    )}
-                  </p>
-                  <p className="text-xs text-foreground-500">
-                    Dibuat : {dayjs(item.created_at).format("DD/MM/YYYY")}
-                  </p>
-                </div>
-                <div className=" flex flex-col gap-1">
-                  <Button isIconOnly size="sm" variant="flat">
-                    <FaWhatsapp className="text-lg" />
-                  </Button>
-                  <Button isIconOnly size="sm" variant="flat">
-                    <FaPencil className="" />
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          {hasNextPage && (
-            <Button
-              className="mx-auto my-2"
-              isLoading={isFetchingNextPage}
-              variant="flat"
-              onPress={() => fetchNextPage()}
-            >
-              Show More
-            </Button>
-          )}
-        </div>
-      </div>
-      <NewUserModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-      />
-    </main>
+        <ChangePasswordModal
+          isOpen={showChangePassword}
+          onClose={() => setShowChangePassword(false)}
+        />
+        <NewUserModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+        />
+      </main>
+    </div>
   );
 };
 

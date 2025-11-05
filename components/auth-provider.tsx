@@ -59,13 +59,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         return true;
       })
       .catch((err) => {
-        // mySwal.fire(
-        //   <SwalContent
-        //     description="Pastikan nik dan password yang anda masukan benar"
-        //     icon={<CloseSquareIcon className="w-16 h-16 text-danger" />}
-        //     title="Login Gagal"
-        //   />
-        // );
         popup.show({
           title: "Login Gagal",
           description: "Pastikan nik dan password yang anda masukan benar",

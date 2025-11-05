@@ -54,17 +54,23 @@ const Login = (props: Props) => {
     <main className="bg">
       <div className="p-4 h-dvh flex flex-col justify-end">
         <div className="m-auto">
-          <div className="relative">
+          <div className="relative flex justify-center items-center">
             <div className="w-52 h-52 absolute block bg-foreground-300 rounded-2xl" />
             <div className="w-52 h-52 block bg-primary rotate-45 rounded-2xl" />
+            <p className="absolute text-primary-foreground text-center">
+              <p className="text-4xl font-bold select-none">
+                --- <br />
+                FORGING
+                <br />
+                PRESS II
+                <br />
+                ---
+              </p>
+            </p>
           </div>
         </div>
-        <p className="mb-2 text-3xl font-bold text-primary">Welcome...</p>
-        <p className="mb-4 text-sm text-foreground-700">
-          Selamat Datang di <strong>PRESS II</strong>, silahkan login terlebih
-          dahulu. Terimakasih....
-        </p>
         <Form
+          autoComplete="off"
           className="flex flex-col gap-4 w-full mb-10"
           onSubmit={handleSubmit}
         >
@@ -106,9 +112,15 @@ const Login = (props: Props) => {
             variant="bordered"
             onChange={handleFieldChange}
           />
+          <Link
+            className="-mt-1 text-sm ms-auto text-primary hover:underline"
+            href={"/auth/forgot-password"}
+          >
+            Lupa Password?
+          </Link>
           <Button
             fullWidth
-            className="mt-2"
+            className=""
             color="primary"
             isLoading={isLoading}
             size="lg"

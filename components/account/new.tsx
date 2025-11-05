@@ -84,12 +84,13 @@ const NewUserModal = ({ isOpen, onClose }: Props) => {
       })
       .catch((error) => {
         popup.show({
-          title: "Upload Gagal",
+          title: "Gagal Menambahkan",
           icon: CloseSquareIcon,
+          iconColor: "danger",
           description:
             error?.response?.data?.message ||
             error?.message ||
-            "Terjadi kesalahan saat menambah informasi.",
+            "Terjadi kesalahan saat menambah anggota.",
           confirmButton: "Tutup",
         });
       })
