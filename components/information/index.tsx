@@ -7,10 +7,12 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { addToast } from "@heroui/toast";
 import { Spinner } from "@heroui/spinner";
+import { Role } from "@prisma/client";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
 import { TrashIcon } from "../icons";
+import { useAuth } from "../auth-provider";
 
 import DetailModal from "./detail";
 import NewModal from "./new";
@@ -25,6 +27,7 @@ const Information = (props: Props) => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [shownInfo, setShownInfo] = useState<InformationT | null>(null);
   const popup = usePopup();
+  const auth = useAuth();
 
   const { data, hasNextPage, fetchNextPage, isLoading } = useInfiniteQuery(
     {
@@ -81,15 +84,17 @@ const Information = (props: Props) => {
     <div>
       <Navbar
         endContent={
-          <Button
-            isIconOnly
-            className="text-primary-foreground"
-            size="sm"
-            variant="bordered"
-            onPress={() => setAddModalOpen(true)}
-          >
-            <FaPlus size={18} />
-          </Button>
+          auth.hasRole(Role.Admin, Role.Leader, Role.Subleader) && (
+            <Button
+              isIconOnly
+              className="text-primary-foreground"
+              size="sm"
+              variant="bordered"
+              onPress={() => setAddModalOpen(true)}
+            >
+              <FaPlus size={18} />
+            </Button>
+          )
         }
         title="INFORMATION"
       />

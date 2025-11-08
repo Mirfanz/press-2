@@ -12,12 +12,14 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@heroui/react";
+import { Role } from "@prisma/client";
 
 import {
   GalleryEditIcon,
   LockPasswordIcon,
   LogoutIcon,
   SettingIcon,
+  ShareIcon,
   UserPlusIcon,
 } from "../icons";
 import Navbar from "../navbar";
@@ -66,57 +68,35 @@ const Account = (props: Props) => {
     <div>
       <Navbar
         endContent={
-          <Button
-            isIconOnly
-            size="sm"
-            variant="light"
-            onPress={() => setShowAddModal(true)}
-          >
-            <UserPlusIcon className="text-foreground-100" />
-          </Button>
+          auth.hasRole(Role.Admin, Role.Leader) ? (
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              onPress={() => setShowAddModal(true)}
+            >
+              <UserPlusIcon className="text-foreground-100" size={24} />
+            </Button>
+          ) : (
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              onPress={() =>
+                window.navigator.share?.({
+                  title: "Akun Saya",
+                  text: `Lihat profil saya di aplikasi Press2`,
+                  url: window.location.href,
+                })
+              }
+            >
+              <ShareIcon className="text-foreground-100" size={24} />
+            </Button>
+          )
         }
         title="ACCOUNT"
       />
       <main className="relative">
-        {/* <div className="bg-primary p-6 pt-2 shadow-md rounded-b-2xl">
-          <div className="flex gap-4 items-center">
-            <Avatar size="lg" src={auth.user?.image_url || undefined} />
-            <div className="">
-              <h4 className="text-foreground-100 font-medium text-lg">{auth.user?.name}</h4>
-              <p className="text-sm text-foreground-300">
-                {auth.user?.nik.toUpperCase()} | {auth.user?.role}
-              </p>
-            </div>
-            <Dropdown className="min-w-0">
-              <DropdownTrigger>
-                <Button isIconOnly className="ms-auto text-foreground-100" variant="flat">
-                  <SettingIcon />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="w-max">
-                <DropdownItem key={"profil"} startContent={<GalleryEditIcon size={16} />}>
-                  Ubah Foto
-                </DropdownItem>
-                <DropdownItem
-                  key={"password"}
-                  startContent={<LockPasswordIcon size={16} />}
-                  onPress={() => setShowChangePassword(true)}
-                >
-                  Ganti Password
-                </DropdownItem>
-                <DropdownItem
-                  key={"delete"}
-                  className="text-danger"
-                  color="danger"
-                  startContent={<LogoutIcon size={16} />}
-                  onPress={() => auth.logout()}
-                >
-                  Logout
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </div> */}
         <div className="p-6 rounded-b-2xl flex w-full flex-row gap-4 bg-primary">
           <Avatar
             className="h-16 aspect-square min-w-max"
@@ -148,7 +128,12 @@ const Account = (props: Props) => {
           <div className="flex flex-col gap-2">
             <Dropdown className="min-w-0">
               <DropdownTrigger>
-                <Button isIconOnly color="warning" variant="light">
+                <Button
+                  isIconOnly
+                  className="text-default"
+                  color="default"
+                  variant="light"
+                >
                   <SettingIcon size={24} />
                 </Button>
               </DropdownTrigger>
@@ -177,15 +162,6 @@ const Account = (props: Props) => {
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <Button
-              isIconOnly
-              color="danger"
-              size="md"
-              variant="light"
-              onPress={auth.logout}
-            >
-              <LogoutIcon size={24} />
-            </Button>
           </div>
         </div>
         {/* <div className="flex gap-2 sticky top-16 mb-4 z-10 bg-background pt-4">

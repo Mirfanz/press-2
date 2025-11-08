@@ -10,10 +10,12 @@ import { User } from "@heroui/user";
 import { Button } from "@heroui/button";
 import { addToast } from "@heroui/toast";
 import { Spinner } from "@heroui/spinner";
+import { Role } from "@prisma/client";
 
 import { usePopup } from "../popup-provider";
 import Navbar from "../navbar";
 import { CloseSquareIcon, QuestionCircleIcon } from "../icons";
+import { useAuth } from "../auth-provider";
 
 import { TaxT, UserT } from "@/types";
 import dayjs from "@/lib/utils/dayjs";
@@ -24,6 +26,7 @@ type Props = {};
 const TaxDetail = (props: Props) => {
   const params = useParams<{ taxId: string }>();
   const popup = usePopup();
+  const auth = useAuth();
   const { data, isLoading, error } = useQuery(
     {
       queryKey: ["tax", params.taxId],
@@ -120,14 +123,16 @@ const TaxDetail = (props: Props) => {
                     description={`${user.nik.toUpperCase()} | ${user.role}`}
                     name={user.name}
                   />
-                  <Button
-                    color="primary"
-                    size="sm"
-                    variant="solid"
-                    onPress={() => handleLunas(user)}
-                  >
-                    Lunas
-                  </Button>
+                  {auth.hasRole(Role.Admin, Role.Bendahara) && (
+                    <Button
+                      color="primary"
+                      size="sm"
+                      variant="solid"
+                      onPress={() => handleLunas(user)}
+                    >
+                      Lunas
+                    </Button>
+                  )}
                 </div>
               ))}
               {!data.unpaid_users.length && (

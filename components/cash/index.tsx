@@ -8,6 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 import { addToast } from "@heroui/toast";
 import Link from "next/link";
 import { Spinner } from "@heroui/spinner";
+import { Role } from "@prisma/client";
 
 import Navbar from "../navbar";
 import { HandMoneyIcon, TrashIcon } from "../icons";
@@ -106,7 +107,7 @@ const Cash = (props: Props) => {
         <Navbar
           endContent={
             <>
-              {auth.hasRole("Admin", "Bendahara") && (
+              {auth.hasRole(Role.Admin, Role.Bendahara) && (
                 <Button
                   isIconOnly
                   className="text-foreground-100"

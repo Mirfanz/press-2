@@ -7,11 +7,11 @@ import axios from "axios";
 import { Alert } from "@heroui/alert";
 import { Skeleton } from "@heroui/skeleton";
 import { Button } from "@heroui/button";
-import { FaCircleInfo } from "react-icons/fa6";
 import { Spinner } from "@heroui/spinner";
 
 import TaxCard from "../cash/tax-card";
 import Navbar from "../navbar";
+import { QuestionCircleIcon, ShareIcon } from "../icons";
 
 import UserCard from "./user-card";
 
@@ -47,7 +47,26 @@ const Profile = (props: Props) => {
 
   return (
     <div>
-      <Navbar title="ACCOUNT" />
+      <Navbar
+        endContent={
+          <Button
+            isIconOnly
+            className="text-default"
+            size="sm"
+            variant="light"
+            onPress={() =>
+              window.navigator.share?.({
+                title: "Profil " + (user.data?.name || ""),
+                text: "Kunjungi detail profil di aplikasi",
+                url: window.location.href,
+              })
+            }
+          >
+            <ShareIcon />
+          </Button>
+        }
+        title="ACCOUNT"
+      />
       <main className="">
         <div className="container py-4">
           {user.isLoading ? (
@@ -64,7 +83,7 @@ const Profile = (props: Props) => {
               variant="light"
               onPress={() => {}}
             >
-              <FaCircleInfo />
+              <QuestionCircleIcon size={20} />
             </Button>
           </div>
           <div className="flex flex-col gap-4">

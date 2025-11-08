@@ -4,6 +4,7 @@ import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { Modal, ModalBody, ModalContent, ModalFooter } from "@heroui/modal";
 import React from "react";
+import { Role } from "@prisma/client";
 
 import { useAuth } from "../auth-provider";
 import { TrashIcon } from "../icons";
@@ -51,7 +52,7 @@ const DetailModal = ({ data, onClose, deleteTransaction }: Props) => {
               "dddd, DD MMM YYYY",
             )}
           </p>
-          {auth.hasRole("Admin", "Bendahara") && (
+          {auth.hasRole(Role.Admin, Role.Bendahara) && (
             <Button
               isIconOnly
               color="danger"

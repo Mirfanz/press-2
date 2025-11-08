@@ -6,8 +6,10 @@ import React from "react";
 import { Button } from "@heroui/button";
 import { FaPencil } from "react-icons/fa6";
 import Link from "next/link";
+import { Role } from "@prisma/client";
 
 import { EyeIcon } from "../icons";
+import { useAuth } from "../auth-provider";
 
 import dayjs from "@/lib/utils/dayjs";
 import { UserT } from "@/types";
@@ -17,6 +19,8 @@ type Props = {
 };
 
 const UserCard = ({ user }: Props) => {
+  const auth = useAuth();
+
   return (
     <Card fullWidth className="p-4 flex-row gap-4">
       <Avatar
@@ -52,9 +56,11 @@ const UserCard = ({ user }: Props) => {
         >
           <EyeIcon size={20} />
         </Button>
-        <Button isIconOnly size="sm" variant="flat">
-          <FaPencil className="" />
-        </Button>
+        {auth.hasRole(Role.Admin, Role.Leader) && (
+          <Button isIconOnly size="sm" variant="flat">
+            <FaPencil className="" />
+          </Button>
+        )}
       </div>
     </Card>
   );

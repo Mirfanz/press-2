@@ -4,10 +4,12 @@ import React from "react";
 import { Avatar, Button, Card, Chip, Divider } from "@heroui/react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { FaShare } from "react-icons/fa6";
+import Link from "next/link";
 
 import { useAuth } from "./auth-provider";
 import { usePopup } from "./popup-provider";
-import { QuestionCircleIcon, SettingIcon } from "./icons";
+import { LogoutIcon, WalletBoldIcon } from "./icons";
 
 import queryClient from "@/lib/utils/query-client";
 
@@ -16,7 +18,7 @@ type Props = {};
 const Home = (props: Props) => {
   const auth = useAuth();
   const popup = usePopup();
-  const { data: balance } = useQuery(
+  const { data: balance, isLoading: loadingBalance } = useQuery(
     {
       queryKey: ["balance"],
       queryFn: async () => {
@@ -24,21 +26,10 @@ const Home = (props: Props) => {
 
         return res.data.data.balance;
       },
-      initialData: 0,
+      // initialData: 0,
     },
     queryClient,
   );
-  const show = () => {
-    popup.show({
-      icon: QuestionCircleIcon,
-      // iconColor: "danger",
-      title: "Muhammad Irfan",
-      description: "lskvdjsvdsj kdsbakjdas kdjaskdas dkdkjsa askdj jasds",
-      cancelButton: "Batal",
-      confirmButton: "Kirim",
-      // confirmColor: "",
-    });
-  };
 
   return (
     <main>
@@ -57,24 +48,39 @@ const Home = (props: Props) => {
           isIconOnly
           className="ml-auto"
           color="primary"
-          variant="solid"
-          onPress={show}
+          variant="light"
+          onPress={auth.logout}
         >
-          <SettingIcon />
+          <LogoutIcon />
         </Button>
       </div>
       <div className="container">
-        <div className="p-6 rounded-2xl flex bg-primary text-primary-foreground shadow-primary-500 shadow-2xl flex-row gap-5">
-          <div className="flex items-center flex-col gap-1">
-            <p className="text-sm text-foreground-300">Member</p>
-            <p className="text-2xl font-medium">42</p>
-          </div>
-          <div className="flex flex-col gap-1 border-l ps-5 border-foreground-400">
-            <p className="text-sm text-foreground-300">Saldo Kas :</p>
+        <div className="p-6 rounded-2xl flex flex-col gap-5 bg-primary text-primary-foreground shadow-primary-500 shadow-2xl">
+          <div className="flex gap-2 items-center">
+            <WalletBoldIcon size={28} />
             <p className="text-2xl font-medium">
-              Rp {balance.toLocaleString()}
+              {loadingBalance ? "Loading..." : balance.toLocaleString()}
             </p>
+            <Button
+              isIconOnly
+              className="ms-auto text-default"
+              color="default"
+              size="sm"
+              variant="light"
+              onPress={() =>
+                window.navigator.share?.({
+                  url: window.location.href,
+                  title: "Saldo Kas FP-2",
+                  text: "Kunjungi website untuk detail lainnya.",
+                })
+              }
+            >
+              <FaShare className="text-xl" />
+            </Button>
           </div>
+          <Button as={Link} className="" color="default" href="/cash" size="sm">
+            Lihat Laporan Keuangan
+          </Button>
         </div>
       </div>
       {/* <div className="container my-6">
@@ -98,28 +104,36 @@ const Home = (props: Props) => {
           <Card className="w-full p-6 pt-4">
             <h5 className="text-center font-bold text-primary">Line 1</h5>
             <Divider className="mt-3 mb-4" />
-            <div className="">
+            <div className="flex flex-col gap-1">
               <div className="flex text-sm text-foreground-500 justify-between">
-                <p className="mb-1">Bucket Loader</p>
-                <p className="">FILL</p>
+                <p className="">Bucket Loader</p>
+                <p className="">ISI</p>
               </div>
               <div className="flex text-sm text-foreground-500 justify-between">
-                <p className="">Emergency</p>
-                <p className="text-danger">ON</p>
+                <p className="">Suhu Ruangan</p>
+                <p className="">30*C</p>
+              </div>
+              <div className="flex text-sm text-foreground-500 justify-between">
+                <p className="">Kelembaban</p>
+                <p className="">53%</p>
               </div>
             </div>
           </Card>
           <Card className="w-full p-6 pt-4">
             <h5 className="text-center font-bold text-primary">Line 2</h5>
             <Divider className="mt-3 mb-4" />
-            <div className="">
+            <div className="flex flex-col gap-1">
               <div className="flex text-sm text-foreground-500 justify-between">
-                <p className="mb-1">Bucket Loader</p>
-                <p className="text-danger">EMPTY</p>
+                <p className="">Bucket Loader</p>
+                <p className="text-danger">KOSONG</p>
               </div>
               <div className="flex text-sm text-foreground-500 justify-between">
-                <p className="">Emergency</p>
-                <p className="">OFF</p>
+                <p className="">Suhu Ruangan</p>
+                <p className="">30*C</p>
+              </div>
+              <div className="flex text-sm text-foreground-500 justify-between">
+                <p className="">Kelembaban</p>
+                <p className="">53%</p>
               </div>
             </div>
           </Card>

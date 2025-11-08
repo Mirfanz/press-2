@@ -8,8 +8,10 @@ import { Pagination, Virtual } from "swiper/modules";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Counter from "yet-another-react-lightbox/plugins/counter";
+import { Role } from "@prisma/client";
 
 import { TrashIcon } from "../icons";
+import { useAuth } from "../auth-provider";
 
 import dayjs from "@/lib/utils/dayjs";
 import { InformationT } from "@/types";
@@ -21,6 +23,7 @@ type Props = {
 };
 
 const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
+  const auth = useAuth();
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -77,15 +80,17 @@ const DetailModal = ({ data, onClose, deleteInformation }: Props) => {
             <p className="text-sm text-foreground-600 m-auto ms-0 whitespace-pre-wrap">
               {dayjs(data?.created_at).format("dddd, DD\nMMMM YYYY")}
             </p>
-            <Button
-              isIconOnly
-              color="danger"
-              isLoading={deleting}
-              variant="flat"
-              onPress={handleDeleteInfo}
-            >
-              <TrashIcon />
-            </Button>
+            {auth.hasRole(Role.Admin, Role.Leader, Role.Subleader) && (
+              <Button
+                isIconOnly
+                color="danger"
+                isLoading={deleting}
+                variant="flat"
+                onPress={handleDeleteInfo}
+              >
+                <TrashIcon />
+              </Button>
+            )}
             <Button onPress={onClose}>Tutup</Button>
           </ModalFooter>
         </ModalContent>
