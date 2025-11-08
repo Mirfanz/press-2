@@ -3,8 +3,6 @@
 import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { Avatar } from "@heroui/avatar";
-import { Card } from "@heroui/card";
-import { FaPencil, FaWhatsapp } from "react-icons/fa6";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Spinner } from "@heroui/spinner";
@@ -27,6 +25,7 @@ import { useAuth } from "../auth-provider";
 
 import NewUserModal from "./new";
 import ChangePasswordModal from "./change-password";
+import UserCard from "./user-card";
 
 import { UserT } from "@/types";
 import queryClient from "@/lib/utils/query-client";
@@ -207,43 +206,7 @@ const Account = (props: Props) => {
             {isLoading && <Spinner />}
             {data?.pages
               .flatMap((page) => page.data)
-              .map((item: UserT) => (
-                <Card key={item.nik} fullWidth className="p-4 flex-row gap-4">
-                  <Avatar
-                    className="h-16 aspect-square min-w-max"
-                    radius="md"
-                    src={item.image_url || undefined}
-                  />
-                  <div className="text-start w-full flex flex-col gap-0.5">
-                    <p className="text-sm">{item.name}</p>
-                    <p className="text-xs text-foreground-500">
-                      NIK : {item.nik.toUpperCase()}
-                    </p>
-                    <p className="text-xs text-foreground-500">
-                      Role : {item.role}
-                    </p>
-                    <p className="text-xs text-foreground-500">
-                      Status :
-                      {item.active ? (
-                        <span className="text-success"> Masih Bekerja</span>
-                      ) : (
-                        <span className="text-danger"> Nonaktif</span>
-                      )}
-                    </p>
-                    <p className="text-xs text-foreground-500">
-                      Dibuat : {dayjs(item.created_at).format("DD/MM/YYYY")}
-                    </p>
-                  </div>
-                  <div className=" flex flex-col gap-1">
-                    <Button isIconOnly size="sm" variant="flat">
-                      <FaWhatsapp className="text-lg" />
-                    </Button>
-                    <Button isIconOnly size="sm" variant="flat">
-                      <FaPencil className="" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+              .map((item: UserT) => <UserCard key={item.nik} user={item} />)}
             {hasNextPage && (
               <Button
                 className="mx-auto my-2"
