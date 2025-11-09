@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
+import PwaRegister from "@/components/pwa-register";
 
 export const metadata: Metadata = {
   title: {
@@ -14,9 +15,8 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: { icon: "/favicon.ico" },
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
@@ -40,6 +40,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
+        <PwaRegister />
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <Suspense>{children}</Suspense>
         </Providers>
