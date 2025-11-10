@@ -1,0 +1,137 @@
+"use client";
+
+import React from "react";
+import { Avatar, Button, Card, Chip, Divider } from "@heroui/react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { FaShare } from "react-icons/fa6";
+import Link from "next/link";
+
+import { useAuth } from "../auth-provider";
+import { usePopup } from "../popup-provider";
+import { LogoutIcon, WalletBoldIcon } from "../icons";
+import MqttProvider from "../mqtt-provider";
+
+import Sensor from "./sensor";
+import Indicator from "./indicator";
+
+import queryClient from "@/lib/utils/query-client";
+
+type Props = {};
+
+const Home = (props: Props) => {
+  const auth = useAuth();
+  const popup = usePopup();
+  const { data: balance, isLoading: loadingBalance } = useQuery(
+    {
+      queryKey: ["balance"],
+      queryFn: async () => {
+        const res = await axios.get("/api/finance");
+
+        return res.data.data.balance;
+      },
+    },
+    queryClient,
+  );
+
+  return (
+    <MqttProvider>
+      <main>
+        <div className="flex px-5 py-6 gap-4 items-center">
+          <Avatar
+            isBordered
+            size="md"
+            src={auth.user?.image_url || undefined}
+          />
+          <div className="">
+            <h3 className="text-sm font-medium -mb-1 text-foreground-800">
+              {auth.user?.name}
+            </h3>
+            <small className="text-xs text-foreground-500">
+              <span className="uppercase">{auth.user?.nik}</span> |{" "}
+              {auth.user?.role}
+            </small>
+          </div>
+          <Button
+            isIconOnly
+            className="ml-auto"
+            color="primary"
+            variant="light"
+            onPress={auth.logout}
+          >
+            <LogoutIcon />
+          </Button>
+        </div>
+        <div className="container">
+          <div className="p-6 rounded-2xl flex flex-col gap-5 bg-primary text-primary-foreground shadow-primary-500 shadow-2xl">
+            <div className="flex gap-2 items-center">
+              <WalletBoldIcon size={28} />
+              <p className="text-2xl font-medium">
+                {loadingBalance ? "Loading..." : balance.toLocaleString()}
+              </p>
+              <Button
+                isIconOnly
+                className="ms-auto text-default"
+                color="default"
+                size="sm"
+                variant="light"
+                onPress={() =>
+                  window.navigator.share?.({
+                    url: window.location.href,
+                    title: "Saldo Kas FP-2",
+                    text: "Kunjungi website untuk detail lainnya.",
+                  })
+                }
+              >
+                <FaShare className="text-xl" />
+              </Button>
+            </div>
+            <Button
+              as={Link}
+              className=""
+              color="default"
+              href="/cash"
+              size="sm"
+            >
+              Lihat Laporan Keuangan
+            </Button>
+          </div>
+        </div>
+        <div className="container my-6">
+          <div className="flex flex-col gap-4">
+            <Indicator />
+            <Sensor lineCode="line1" title="Line 1" />
+            <Sensor lineCode="line2" title="Line 2" />
+          </div>
+        </div>
+        <div className="container my-6">
+          <Card className="p-4">
+            <h5 className="text-center font-bold text-primary">
+              Happy Birthday🎉
+            </h5>
+            <Divider className="my-3" />
+            <div className="flex flex-col gap-3">
+              <p className="text-sm text-foreground-500">
+                Selamat ulang tahun, semoga tidak lupa makan-makan-nya,
+                thankyuuu &gt;_&lt;
+              </p>
+              <div className="flex justify-center gap-2 flex-wrap">
+                <Chip className="" size="sm">
+                  Muhammad Irfan
+                </Chip>
+                <Chip className="" size="sm">
+                  Adinda Oktasari
+                </Chip>
+                <Chip className="" size="sm">
+                  Arsyanendra Alfatih
+                </Chip>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </main>
+    </MqttProvider>
+  );
+};
+
+export default Home;
