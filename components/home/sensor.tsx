@@ -16,6 +16,7 @@ const Sensor = ({ title, lineCode }: Props) => {
   const { client: mqtt } = useMqtt();
   const [isOnline, setIsOnline] = React.useState(false);
   const [bucketEmpty, setBucketEmpty] = React.useState(true);
+  const [isFinding, setIsFinding] = React.useState(true);
   const [temperature, setTemperature] = React.useState(0);
   const [humidity, setHumidity] = React.useState(0);
   const [totalNG, setTotalNG] = React.useState(0);
@@ -26,6 +27,7 @@ const Sensor = ({ title, lineCode }: Props) => {
       `raptorfx02/${lineCode}/bucket`,
       `raptorfx02/${lineCode}/temperature`,
       `raptorfx02/${lineCode}/humidity`,
+      `raptorfx02/${lineCode}/finding`,
       `raptorfx02/${lineCode}/total_ng`,
     ]);
     mqtt.current?.on("message", (topic, message) => {
@@ -42,7 +44,10 @@ const Sensor = ({ title, lineCode }: Props) => {
         case `raptorfx02/${lineCode}/bucket`:
           const bucketStatus = message.toString();
 
-          setBucketEmpty(bucketStatus !== "true");
+          setBucketEmpty(bucketStatus !== "1");
+          break;
+        case `raptorfx02/${lineCode}/finding`:
+          setIsFinding(message.toString() == "1");
           break;
         case `raptorfx02/${lineCode}/total_ng`:
           setTotalNG(parseInt(message.toString(), 10));
@@ -66,7 +71,9 @@ const Sensor = ({ title, lineCode }: Props) => {
               }}
             >
               <p className="text-sm text-primary">Suhu:</p>
-              <p className="text-2xl text-primary font-semibold">{temperature}*C</p>
+              <p className="text-2xl text-primary font-semibold">
+                {temperature}*C
+              </p>
             </div>
             <div
               className="flex aspect-square w-full rounded-xl justify-center gap-4 items-center flex-col"
@@ -87,8 +94,30 @@ const Sensor = ({ title, lineCode }: Props) => {
             }}
           >
             <p className="text-sm text-primary">Bucket Loader:</p>
-            <p className={clsx("text-sm font-semibold", bucketEmpty ? "text-danger animate-pulse" : "text-primary")}>
+            <p
+              className={clsx(
+                "text-sm font-semibold",
+                bucketEmpty ? "text-danger animate-pulse" : "text-primary",
+              )}
+            >
               {bucketEmpty ? "KOSONG" : "ISI"}
+            </p>
+          </div>
+          <div
+            className="flex p-4 w-full rounded-xl justify-between gap-4 items-center"
+            style={{
+              background: "linear-gradient(145deg, #e6e6e6, #ffffff)",
+              boxShadow: "8px 8px 16px #cccccc, -8px -8px 16px #ffffff",
+            }}
+          >
+            <p className="text-sm text-primary">Forklift:</p>
+            <p
+              className={clsx(
+                "text-sm font-semibold",
+                isFinding ? "text-danger animate-pulse" : "text-primary",
+              )}
+            >
+              {isFinding ? "Mencari" : "OK"}
             </p>
           </div>
           <div
